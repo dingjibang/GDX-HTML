@@ -1,14 +1,22 @@
 package org.jsoup.nodes;
 
+import com.steadystate.css.dom.CSSStyleDeclarationImpl;
 import com.steadystate.css.dom.Property;
+import com.steadystate.css.parser.CSSOMParser;
+import com.steadystate.css.parser.SACParserCSS3;
 import org.jsoup.SerializationException;
+import org.jsoup.helper.ChangeNotifyingArrayList;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.helper.Validate;
 import org.jsoup.select.NodeFilter;
 import org.jsoup.select.NodeTraversor;
 import org.jsoup.select.NodeVisitor;
+import org.w3c.css.sac.InputSource;
+import org.w3c.dom.css.CSSStyleDeclaration;
+import org.w3c.dom.css.CSSStyleSheet;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 
 /**
@@ -20,7 +28,49 @@ public abstract class Node implements Cloneable {
     Node parentNode;
     int siblingIndex;
 
-    public List<List<Property>> styles = new ArrayList<List<Property>>();
+    private boolean needsUpdateStyle = true;
+    public List<List<Property>> styles = new ChangeNotifyingArrayList<List<Property>>(10) {
+        public void onContentsChanged() {
+            needsUpdateAttrStyle = true;
+        }
+    };
+
+    private boolean needsUpdateAttrStyle = true;
+    private List<Property> attrStyles = new ArrayList<>();
+
+    private List<List<Property>> allStyles = new ArrayList<>();
+
+    public List<List<Property>> getAllStyles(){
+        if(needsUpdateAttrStyle){
+            attrStyles.clear();
+            try {//fuck java
+                CSSStyleDeclarationImpl dec = (CSSStyleDeclarationImpl)
+                        new CSSOMParser(new SACParserCSS3()).parseStyleDeclaration(new InputSource(new StringReader(attr("style"))));
+                if(dec.getProperties().size() != 0)
+                    attrStyles.addAll(dec.getProperties());
+
+            } catch (Exception e){
+                e.printStackTrace();
+            } finally {
+                needsUpdateAttrStyle = false;
+                combine();
+            }
+        }
+
+        if(needsUpdateStyle){
+            needsUpdateStyle = false;
+            combine();
+        }
+
+        return allStyles;
+    }
+
+    private void combine(){
+        allStyles.clear();
+        allStyles.addAll(styles);
+        allStyles.add(attrStyles);
+    }
+
 
     /**
      * Default constructor. Doesn't setup base uri, children, or attributes; use with caution.
@@ -86,6 +136,8 @@ public abstract class Node implements Cloneable {
      */
     public Node attr(String attributeKey, String attributeValue) {
         attributeKey = NodeUtils.parser(this).settings().normalizeAttribute(attributeKey);
+        if(attributeKey.equalsIgnoreCase("style"))
+            needsUpdateAttrStyle = true;
         attributes().putIgnoreCase(attributeKey, attributeValue);
         return this;
     }

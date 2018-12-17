@@ -26,7 +26,7 @@ class HTMLStage extends Stage{
 		this.res = new ResourceManager()
 		this.document = document
 
-		InputSource source = new InputSource(new StringReader("h1{background: #ffcc44; margin-top: 0; color: green; font-size: 20px}"))
+		InputSource source = new InputSource(new StringReader("h1{background: #ffcc44; margin-top: 0; color: green; font-size: 20px} h1 div{color: red}"))
 		CSSOMParser parser = new CSSOMParser(new SACParserCSS3())
 		CSSStyleSheet styleSheet = parser.parseStyleSheet(source, null, null)
 

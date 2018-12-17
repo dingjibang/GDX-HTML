@@ -1,6 +1,7 @@
 package team.rpsg.html.dom
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Disposable
 import com.steadystate.css.dom.Property
 import groovy.transform.CompileStatic
@@ -41,10 +42,10 @@ class Dom extends Table implements Disposable{
 		node.toString()
 	}
 
-	def style(String name, orDefault = null, parser = {r -> r}){
+	def style(String name, orDefault = null, parser = {r -> r}, isParent = false){
 		def result = orDefault
 
-		node.styles.each {
+		(isParent ? node.parent() : node).allStyles.each {
 			it.findAll({it.name == name}).each({result = it.value})
 		}
 
@@ -57,7 +58,7 @@ class Dom extends Table implements Disposable{
 				return
 
 			Dom child = parse(it)
-			add(child)
+			add(child).align(Align.topLeft)
 			child.parse()
 			child.build()
 			child.buildChild()
