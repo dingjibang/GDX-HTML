@@ -1,0 +1,28 @@
+package team.rpsg.html.dom
+
+import com.badlogic.gdx.utils.Align
+import org.jsoup.nodes.Node
+import team.rpsg.html.HTMLStage
+
+/**
+ * rootDom = html document
+ */
+class Root extends Dom{
+
+	Root(Node node, HTMLStage stage){
+		this.stage = stage
+		this.node = node
+
+		width = stage.width
+		height = stage.height
+
+		buildChild()
+
+		align(Align.topLeft)
+	}
+
+
+	void dispose() {
+
+	}
+}
