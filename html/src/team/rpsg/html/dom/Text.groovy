@@ -21,13 +21,16 @@ class Text extends Dom {
 	}
 
 	void parse() {
+		super.parse()
+
 		text = (node as TextNode).text()
 		textColor = style("color", "white", ColorParser.&parse, true) as Color
 		fontSize = style("font-size", "16px", SizeParser.&parsePX, true) as int
-		println textColor
 	}
 
 	void build() {
+		super.build()
+
 		def label = res.text.getLabel(text, fontSize)
 		label.color = textColor
 

@@ -10,8 +10,9 @@ import team.rpsg.html.HTMLStage
 class Root extends Dom{
 
 	Root(Node node, HTMLStage stage){
+		super(node)
+
 		this.stage = stage
-		this.node = node
 
 		width = stage.width
 		height = stage.height

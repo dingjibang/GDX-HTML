@@ -27,7 +27,7 @@ public class LoadView extends View {
 	/**id列表*/
 	private List<String> idList = new ArrayList<>();
 
-	Label fps = new Label("1 ", 17), fpsShadow = new Label(" ", 17);
+	//Label fps = new Label("1 ", 17), fpsShadow = new Label(" ", 17);
 	Group sprite;
 
 	public void create() {
@@ -38,8 +38,8 @@ public class LoadView extends View {
 
 		$.add(sprite = new Group()).addActor(image).a(0).to(stage);
 
-		$.add(fpsShadow).position(4, Game.STAGE_HEIGHT - 24).color(Color.BLACK).a(0.5f).to(stage);
-		$.add(fps).position(3, Game.STAGE_HEIGHT - 23).color(Color.WHITE).a(0.5f).to(stage);
+//		$.add(fpsShadow).position(4, Game.STAGE_HEIGHT - 24).color(Color.BLACK).a(0.5f).to(stage);
+//		$.add(fps).position(3, Game.STAGE_HEIGHT - 23).color(Color.WHITE).a(0.5f).to(stage);
 
 		
 		Log.i("Load-view[created]");
@@ -63,10 +63,10 @@ public class LoadView extends View {
 		}
 
 
-		String currentFPS = Gdx.graphics.getFramesPerSecond() + "";
+//		String currentFPS = Gdx.graphics.getFramesPerSecond() + "";
 
-		fps.text(currentFPS);
-		fpsShadow.text(currentFPS);
+//		fps.text(currentFPS);
+//		fpsShadow.text(currentFPS);
 	}
 	
 	public void start(String id) {

@@ -14,6 +14,7 @@ import org.jsoup.select.NodeVisitor;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleSheet;
+import team.rpsg.html.dom.Dom;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -27,6 +28,8 @@ public abstract class Node implements Cloneable {
     static final String EmptyString = "";
     Node parentNode;
     int siblingIndex;
+
+    public List<Property> defaultStyles = new ArrayList<>();
 
     private boolean needsUpdateStyle = true;
     public List<List<Property>> styles = new ChangeNotifyingArrayList<List<Property>>(10) {
@@ -67,6 +70,7 @@ public abstract class Node implements Cloneable {
 
     private void combine(){
         allStyles.clear();
+        allStyles.add(defaultStyles);
         allStyles.addAll(styles);
         allStyles.add(attrStyles);
     }

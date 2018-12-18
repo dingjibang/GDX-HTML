@@ -3,8 +3,7 @@ package team.rpsg.html.dom
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Disposable
-import com.steadystate.css.dom.Property
-import groovy.transform.CompileStatic
+import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
@@ -14,9 +13,11 @@ class Dom extends Table implements Disposable{
 	Node node
 	ResourceManager res
 
+	String display
+	boolean needsRow = false
+
 
 	Dom(){
-
 	}
 
 	Dom(Node node){
@@ -29,13 +30,42 @@ class Dom extends Table implements Disposable{
 
 	static Dom parse(Node node){
 		switch (node.class){
-			case TextNode.class: return new Text(node)
-			default: return new UnknownDom(node)
+
+			case TextNode.class:
+				return new Text(node)
+
+
+			case Element.class:
+				def ele = node as Element
+				try{
+					return HTMLDomPreset.valueOf(ele.tagName().toUpperCase()).dom(node)
+				}catch (e){
+					return new UnknownDom(node)
+				}
+
+
+			default:
+				return new UnknownDom(node)
+
 		}
 	}
 
-	void parse(){}
-	void build(){}
+	void parse(){
+        display = style("display", "inline")
+
+		switch (display.toLowerCase()){
+			case "block": needsRow = true
+		}
+
+	}
+
+	void build(){
+	}
+
+	Dom getParentDom(){
+		parent ? (parent as Dom) : null
+	}
+
 	void dispose(){}
 
 	String toString(){
@@ -54,12 +84,17 @@ class Dom extends Table implements Disposable{
 
 	def buildChild(){
 		node.childNodes().each {
-			if(it instanceof TextNode && it.toString().trim().length() == 0)
-				return
-
 			Dom child = parse(it)
-			add(child).align(Align.topLeft)
 			child.parse()
+
+			if(child.needsRow)
+				row()
+
+			def res = add(child).align(Align.bottomLeft)
+
+			if(child.needsRow)
+				res.colspan(9999).row()
+
 			child.build()
 			child.buildChild()
 		}

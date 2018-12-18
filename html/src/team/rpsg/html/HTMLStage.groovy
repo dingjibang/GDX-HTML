@@ -22,7 +22,7 @@ class HTMLStage extends Stage{
 	Dom rootDom
 	ResourceManager res
 	private HTMLStage(Document document) {
-		debugAll = true
+//		debugAll = true
 		this.res = new ResourceManager()
 		this.document = document
 
@@ -39,10 +39,7 @@ class HTMLStage extends Stage{
 				Selector selector = item.selectors.item(j)
 
 				document.select(selector.toString()).childNodes.each { it.each {node ->
-					println node.class.name
 					node.styles << ((item.style as CSSStyleDeclarationImpl).properties)
-					println ((item.style as CSSStyleDeclarationImpl).properties)
-					println node.styles
 				}}
 			}
 		}

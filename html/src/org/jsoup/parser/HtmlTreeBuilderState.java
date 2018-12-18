@@ -251,11 +251,13 @@ enum HtmlTreeBuilderState {
     InBody {
         boolean process(Token t, HtmlTreeBuilder tb) {
             switch (t.type) {
-                case Character: {
+                 case Character: {
                     Token.Character c = t.asCharacter();
                     if (c.getData().equals(nullString)) {
                         // todo confirm that check
                         tb.error(this);
+                        return false;
+                    }else if (c.getData().trim().length() == 0){
                         return false;
                     } else if (tb.framesetOk() && isWhitespace(c)) { // don't check if whitespace if frames already closed
                         tb.reconstructFormattingElements();
