@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value
  */
 class SizeParser {
 	static int parsePX(Object property){
+		if(property.toString().indexOf('%') > 0)
+			return 16
 		property.toString().replace("px", "").toInteger()
 	}
 }

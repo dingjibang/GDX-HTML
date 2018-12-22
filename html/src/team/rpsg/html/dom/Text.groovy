@@ -32,9 +32,10 @@ class Text extends Dom {
 		super.build()
 
 		def label = res.text.getLabel(text, fontSize)
+		label.width = parent.width
 		label.color = textColor
 
-		add label
+		current.addActor label
 	}
 
 	void dispose() {

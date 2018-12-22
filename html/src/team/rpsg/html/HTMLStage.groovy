@@ -22,7 +22,7 @@ class HTMLStage extends Stage{
 	Dom rootDom
 	ResourceManager res
 	private HTMLStage(Document document) {
-//		debugAll = true
+		debugAll = true
 		this.res = new ResourceManager()
 		this.document = document
 
