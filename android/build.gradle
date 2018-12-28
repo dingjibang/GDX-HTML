@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion '24.0.2'
+    buildToolsVersion '26.0.2'
     compileSdkVersion 22
     sourceSets {
         main {
@@ -19,6 +19,8 @@ android {
         abortOnError false
     }
     compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
 
 
@@ -119,4 +121,6 @@ idea {
     }
 }
 dependencies {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 }

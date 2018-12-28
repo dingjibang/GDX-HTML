@@ -2,6 +2,7 @@ package team.rpsg.html.dom
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
@@ -30,12 +31,16 @@ class Text extends Dom {
 
 	void build() {
 		super.build()
-
 		def label = res.text.getLabel(text, fontSize)
-		label.width = parent.width
+		label.wrap = true
+
+		def conatiner = new Container(label)
+		conatiner.width(getParentDom().width)
+
+
 		label.color = textColor
 
-		current.addActor label
+		current.addActor conatiner
 	}
 
 	void dispose() {

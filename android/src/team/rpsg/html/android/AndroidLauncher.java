@@ -1,7 +1,6 @@
 package team.rpsg.html.android;
 
 import android.os.Bundle;
-import box2dLight.RayHandler;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import team.rpsg.htmlTest.core.Views;

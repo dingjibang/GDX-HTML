@@ -48,7 +48,7 @@ class Dom extends VerticalGroup {
 				def ele = node as Element
 				try{
 					return HTMLDomPreset.valueOf(ele.tagName().toUpperCase()).dom(node)
-				}catch (e){
+				}catch (ignored){
 					return new UnknownDom(node)
 				}
 
