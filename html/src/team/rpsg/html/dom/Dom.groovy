@@ -1,5 +1,6 @@
 package team.rpsg.html.dom
 
+import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
@@ -12,6 +13,7 @@ import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
 import team.rpsg.html.manager.ResourceManager
+import team.rpsg.html.util.SizeParser
 
 class Dom extends VerticalGroup {
 	HorizontalGroup current
@@ -65,7 +67,7 @@ class Dom extends VerticalGroup {
 	}
 
 	void parse(){
-        display = style("display", "inline")
+        display = style("display", "inline", {r -> r}, false, false)
 
 		switch (display.toLowerCase()){
 			case "block":
@@ -74,7 +76,15 @@ class Dom extends VerticalGroup {
 
 
 
-//		widthValue = style("width", inhe)
+		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false, false)
+
+		if(widthValue){
+			width = widthValue.get(this)
+		}else{
+			def p = getParentDom()
+			if(p)
+				width = p.width
+		}
 
 	}
 
@@ -99,32 +109,41 @@ class Dom extends VerticalGroup {
 	}
 
 	def style(String name, orDefault = null, parser = {r -> r}, isParent = false, inherit = true){
-		def result = orDefault
+		def result = null
 
 		(isParent ? node.parent() : node).allStyles.each {
 			it.findAll({it.name == name}).each({result = it.value})
 		}
 
-		return parser(result)
+		if(result)
+			return parser(result)
+
+		if(!inherit)
+			return parser(orDefault)
+
+		def pDom = parentDom
+
+		if(!pDom)
+			return parser(orDefault)
+
+		return pDom.style(name, orDefault, parser, isParent, inherit)
 	}
 
 	def buildChild(){
-		if(parentDom)
-			width = parentDom.width
-
-		println width
 		node.childNodes().each {
 			Dom child = parse(it)
+			child.parent = this
 			child.parse()
+
+			def container = new Container(child)
+			container.align(Align.bottomLeft)
+
+			if(child.widthValue)
+				container.width(child.widthValue)
 
 			if(child.needsRow){
 				row()
-
-				def boxProxy = new Table().align(Align.bottomLeft)
-				boxProxy.width = width
-				boxProxy.add(child).width(Value.percentWidth(100)).align(Align.bottomLeft)
-				current.addActor(boxProxy)
-
+				current.addActor(container)
 				row()
 			}else{
 				current.addActor(child)

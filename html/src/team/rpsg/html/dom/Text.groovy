@@ -25,22 +25,30 @@ class Text extends Dom {
 		super.parse()
 
 		text = (node as TextNode).text()
-		textColor = style("color", "white", ColorParser.&parse, true) as Color
-		fontSize = style("font-size", "16px", SizeParser.&parsePX, true) as int
+		textColor = style("color", "white", ColorParser.&parse, true, true) as Color
+		fontSize = style("font-size", "16px", SizeParser.&parsePX, true, true) as int
 	}
 
 	void build() {
 		super.build()
 		def label = res.text.getLabel(text, fontSize)
-		label.wrap = true
-
-		def conatiner = new Container(label)
-		conatiner.width(getParentDom().width)
-
-
 		label.color = textColor
 
-		current.addActor conatiner
+		def wrapProperty = style("-gdx-wrap", "false", {p -> p?.toString()})
+		if(wrapProperty && wrapProperty == "true"){
+			label.wrap = true
+
+			def conatiner = new Container(label)
+			conatiner.width(getParentDom().width)
+			current.addActor conatiner
+		}else {
+			current.addActor label
+		}
+
+
+
+
+
 	}
 
 	void dispose() {
