@@ -1,0 +1,15 @@
+body{
+    background: black;
+    color: white;
+    font-family: Microsoft YaHei;
+}
+
+div{
+    color: red;
+}
+
+#blue-color{
+    color: blue;
+    font-size: 20px;
+}
+

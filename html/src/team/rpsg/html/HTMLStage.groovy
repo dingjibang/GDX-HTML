@@ -16,17 +16,46 @@ import org.w3c.dom.css.CSSStyleSheet
 import team.rpsg.html.dom.Root
 import team.rpsg.html.dom.Dom
 import team.rpsg.html.manager.ResourceManager
+import team.rpsg.html.util.PathParser
 
+/**
+ * GDX-HTML<br>
+ *     using HTMLStage.buildPath(path-to-file) to create your first stage.
+ */
 class HTMLStage extends Stage{
 
 	Document document
 	Dom rootDom
 	ResourceManager res
+
+	def styles = []
+
 	private HTMLStage(Document document) {
 		this.res = new ResourceManager()
 		this.document = document
 
-		InputSource source = new InputSource(new StringReader("h1{background: #ffcc44; margin-top: 0; color: green; font-size: 20px} h1 div{color: red}"))
+		forceBuild()
+	}
+
+	void forceBuild(){
+		this.clear()
+		styles.clear()
+
+		document.getElementsByTag("style").each {styles << it.childNode(0).toString()}
+		document.select("link[rel=\"stylesheet\"]").each {
+			styles << Gdx.files.internal(PathParser.parse(document, it.attr("href"))).readString(it.attr("charset") ?: "utf-8")
+		}
+
+		joinStyles()
+
+		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
+
+		addActor(rootDom = new Root(document.body(), this))
+	}
+
+
+	void joinStyles(String style = null){
+		InputSource source = new InputSource(new StringReader(style ?: styles.join("\n")))
 		CSSOMParser parser = new CSSOMParser(new SACParserCSS3())
 		CSSStyleSheet styleSheet = parser.parseStyleSheet(source, null, null)
 
@@ -42,25 +71,16 @@ class HTMLStage extends Stage{
 				}}
 			}
 		}
-
-		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
-
-		forceBuild()
-	}
-
-	def forceBuild(){
-		this.clear()
-
-		if(rootDom)
-			rootDom.dispose()
-
-		addActor(rootDom = new Root(document.body(), this))
 	}
 
 
+	static HTMLStage buildHTML(String html, String uriPath = null){
+		def doc = Jsoup.parse(html)
 
-	static HTMLStage buildHTML(String html){
-		buildDocument Jsoup.parse(html)
+		if(uriPath)
+			doc.baseUri = uriPath
+
+		buildDocument doc
 	}
 
 	static HTMLStage buildDocument(Document document){
@@ -68,7 +88,7 @@ class HTMLStage extends Stage{
 	}
 
 	static HTMLStage buildPath(String path){
-		buildHTML Gdx.files.internal(path).readString("utf-8")
+		buildHTML(Gdx.files.internal(path).readString("utf-8"), path)
 	}
 
 	void dispose() {

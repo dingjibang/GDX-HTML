@@ -15,6 +15,17 @@ import team.rpsg.html.HTMLStage
 import team.rpsg.html.manager.ResourceManager
 import team.rpsg.html.util.SizeParser
 
+/**
+ * HTML Dom<br/>
+ * Dom has a VerticalGroup(col) that manages multiple HorizontalGroup(row).<br/>
+ * It contains some basic css properties (such as width, padding, margin, display...)<br/>
+ * The implementation of Dom's "display: block;" property is ugly.^.^
+ * <br/>
+ * <br/>
+ * HTML的Dom的实现，每个Dom类似一个Table表格，拥有一个VerticalGroup(行)和多个HorizontalGroup(列)，用来装他的子元素。<br/>
+ * Dom包含了一些基本的css属性，比如宽度，padding，margin，display之类的。<br/>
+ * 顺便一提的是，"display: block;"的实现是很丑陋的hhhh
+ */
 class Dom extends VerticalGroup {
 	HorizontalGroup current
 	Node node
@@ -67,7 +78,7 @@ class Dom extends VerticalGroup {
 	}
 
 	void parse(){
-        display = style("display", "inline", {r -> r}, false, false)
+        display = style("display", "inline", {r -> r}, false)
 
 		switch (display.toLowerCase()){
 			case "block":
@@ -76,7 +87,7 @@ class Dom extends VerticalGroup {
 
 
 
-		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false, false)
+		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false)
 
 		def p = getParentDom()
 		if(!p)
@@ -109,12 +120,10 @@ class Dom extends VerticalGroup {
 		node.toString()
 	}
 
-	def style(String name, orDefault = null, parser = {r -> r}, isParent = false, inherit = true){
+	def style(String name, orDefault = null, parser = {r -> r}, inherit = true){
 		def result = null
 
-		(isParent ? node.parent() : node).allStyles.each {
-			it.findAll({it.name == name}).each({result = it.value})
-		}
+		node.allStyles.each {it.findAll({it.name == name}).each({result = it.value})}
 
 		if(result)
 			return parser(result)
@@ -127,7 +136,7 @@ class Dom extends VerticalGroup {
 		if(!pDom)
 			return parser(orDefault)
 
-		return pDom.style(name, orDefault, parser, isParent, inherit)
+		return pDom.style(name, orDefault, parser, inherit)
 	}
 
 	def buildChild(){
