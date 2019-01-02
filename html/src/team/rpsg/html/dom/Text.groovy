@@ -35,6 +35,11 @@ class Text extends Dom {
 		label.color = textColor
 
 		def wrapProperty = style("-gdx-wrap", "false", {p -> p?.toString()})
+		def markup = style("-gdx-markup", "false", {p -> p?.toString().toBoolean()})
+
+		if(markup)
+			label.style.font.data.markupEnabled = markup
+
 		if(wrapProperty && wrapProperty == "true"){
 			label.wrap = true
 

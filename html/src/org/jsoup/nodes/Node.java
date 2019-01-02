@@ -48,7 +48,7 @@ public abstract class Node implements Cloneable {
             attrStyles.clear();
             try {//fuck java
                 CSSStyleDeclarationImpl dec = (CSSStyleDeclarationImpl)
-                        new CSSOMParser(new SACParserCSS3()).parseStyleDeclaration(new InputSource(new StringReader(attr("style"))));
+                        new CSSOMParser(new SACParserCSS3()).parseStyleDeclaration(new InputSource(new StringReader(attr("style").trim())));
                 if(dec.getProperties().size() != 0)
                     attrStyles.addAll(dec.getProperties());
 

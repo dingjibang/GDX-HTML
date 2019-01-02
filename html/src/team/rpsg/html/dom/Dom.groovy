@@ -78,12 +78,13 @@ class Dom extends VerticalGroup {
 
 		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false, false)
 
+		def p = getParentDom()
+		if(!p)
+			return
 		if(widthValue){
-			width = widthValue.get(this)
+			width = widthValue.get(p)
 		}else{
-			def p = getParentDom()
-			if(p)
-				width = p.width
+			width = p.width
 		}
 
 	}

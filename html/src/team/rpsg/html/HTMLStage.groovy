@@ -7,6 +7,7 @@ import com.steadystate.css.dom.CSSStyleDeclarationImpl
 import com.steadystate.css.dom.CSSStyleRuleImpl
 import com.steadystate.css.parser.CSSOMParser
 import com.steadystate.css.parser.SACParserCSS3
+import groovy.transform.CompileStatic
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.w3c.css.sac.InputSource
@@ -22,7 +23,6 @@ class HTMLStage extends Stage{
 	Dom rootDom
 	ResourceManager res
 	private HTMLStage(Document document) {
-		debugAll = true
 		this.res = new ResourceManager()
 		this.document = document
 
@@ -31,7 +31,6 @@ class HTMLStage extends Stage{
 		CSSStyleSheet styleSheet = parser.parseStyleSheet(source, null, null)
 
 		CSSRuleListImpl rules = styleSheet.getCssRules() as CSSRuleListImpl
-
 		for(def i = 0; i < rules.getLength(); i++){
 			CSSStyleRuleImpl item = rules.item(i) as CSSStyleRuleImpl
 
@@ -43,6 +42,8 @@ class HTMLStage extends Stage{
 				}}
 			}
 		}
+
+		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
 
 		forceBuild()
 	}
@@ -67,7 +68,7 @@ class HTMLStage extends Stage{
 	}
 
 	static HTMLStage buildPath(String path){
-		buildHTML Gdx.files.internal(path).readString()
+		buildHTML Gdx.files.internal(path).readString("utf-8")
 	}
 
 	void dispose() {
