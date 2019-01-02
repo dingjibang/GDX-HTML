@@ -2,6 +2,8 @@ package team.rpsg.html
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.steadystate.css.dom.CSSRuleListImpl
 import com.steadystate.css.dom.CSSStyleDeclarationImpl
 import com.steadystate.css.dom.CSSStyleRuleImpl
@@ -28,7 +30,7 @@ class HTMLStage extends Stage{
 	Dom rootDom
 	ResourceManager res
 
-	def styles = []
+	List<String> styles = []
 
 	private HTMLStage(Document document) {
 		this.res = new ResourceManager()
@@ -46,6 +48,7 @@ class HTMLStage extends Stage{
 			styles << Gdx.files.internal(PathParser.parse(document, it.attr("href"))).readString(it.attr("charset") ?: "utf-8")
 		}
 
+
 		joinStyles()
 
 		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
@@ -54,6 +57,7 @@ class HTMLStage extends Stage{
 	}
 
 
+	@CompileStatic
 	void joinStyles(String style = null){
 		InputSource source = new InputSource(new StringReader(style ?: styles.join("\n")))
 		CSSOMParser parser = new CSSOMParser(new SACParserCSS3())
@@ -66,9 +70,7 @@ class HTMLStage extends Stage{
 			for(def j = 0; j < item.selectors.getLength(); j++) {
 				Selector selector = item.selectors.item(j)
 
-				document.select(selector.toString()).childNodes.each { it.each {node ->
-					node.styles << ((item.style as CSSStyleDeclarationImpl).properties)
-				}}
+				document.select(selector.toString())*.styles*.add ((item.style as CSSStyleDeclarationImpl).properties)
 			}
 		}
 	}

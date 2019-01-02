@@ -10,11 +10,15 @@ using HTML + CSS + JS to build libGDX UI!
 <br>
 
 #怎么用(how to use)
+
     Stage stage = HTMLStage.buildPath(path-to-html-file);
     //done!
 #support CSS
+
 - width
 - font-size
 - color
 - -gdx-wrap (text wrap (unstable)) 
 - -gdx-markup (text markup color language support)
+- background-color
+- padding (padding-left/..right/..top/..bottom)

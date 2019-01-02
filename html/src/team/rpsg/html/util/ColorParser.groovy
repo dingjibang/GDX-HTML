@@ -12,10 +12,11 @@ import java.util.regex.Pattern
 /**
  * color(#hex or rgb or rgba) parser
  */
+@CompileStatic
 class ColorParser {
 	static Color DEFAULT_VALUE = Color.WHITE
 
-	static Color parse(Object value){
+	static Color parse(Object value, Color defaultColor = DEFAULT_VALUE){
 		if(value instanceof CSSValueImpl){
 			if(value.value instanceof LexicalUnitImpl){
 				if(value.value.toString().toLowerCase().startsWith("rgba"))
@@ -31,11 +32,11 @@ class ColorParser {
 			try{
 				return HTMLColor.valueOf(value.toString().toUpperCase()).color()
 			}catch (e){
-				return DEFAULT_VALUE
+				return defaultColor
 			}
 		}
 
-		return DEFAULT_VALUE
+		return defaultColor
 	}
 
 	private static float valueOf(Object value){

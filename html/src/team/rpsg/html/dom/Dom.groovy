@@ -1,18 +1,23 @@
 package team.rpsg.html.dom
 
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.Disposable
-import groovy.transform.CompileStatic
+import com.steadystate.css.dom.CSSValueImpl
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
 import team.rpsg.html.manager.ResourceManager
+import team.rpsg.html.util.BoxParser
+import team.rpsg.html.util.ColorParser
 import team.rpsg.html.util.SizeParser
 
 /**
@@ -35,15 +40,38 @@ class Dom extends VerticalGroup {
 	Value widthValue
 	boolean needsRow = false
 
-
+	Color backgroundColor = null
+	SpriteDrawable backgroundDrawable = null
 
 	Dom(){
+
+	}
+
+	void setBackgroundColor(Color color){
+		backgroundColor = color
+		backgroundDrawable = color ? getRes().defaultDrawable(color) : null
+	}
+
+	void draw(Batch batch, float parentAlpha) {
+		backgroundDrawable?.draw(batch, x, y, width, prefHeight)
+		super.draw(batch, parentAlpha)
 	}
 
 	Dom(Node node){
 		this.node = node
 		align(Align.topLeft)
 		row()
+
+		Dom that = this
+		this.addListener(new ClickListener(){
+			boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				event.bubbles = false
+				println("==============")
+				println(that.node)
+				println(that.x + ", " + that.y + ", " + that.width + ", " + that.height)
+
+			}
+		})
 	}
 
 	ResourceManager getRes(){
@@ -86,18 +114,38 @@ class Dom extends VerticalGroup {
 		}
 
 
+		def bg = style("background-color", null, {r -> ColorParser.parse(r, null)}, false)
+		if(bg)
+			setBackgroundColor(bg as Color)
+
+		//parse padding
+		BoxParser.parse this
+
 
 		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false)
 
 		def p = getParentDom()
 		if(!p)
 			return
-		if(widthValue){
+
+		if(widthValue != null){
 			width = widthValue.get(p)
-		}else{
+		}else if(widthValue == null){
 			width = p.width
 		}
 
+		println(node)
+		println(width)
+		println("===============")
+
+	}
+
+	float getWidth() {
+		super.width
+	}
+
+	float getInnerWidth() {
+		super.width - padLeft - padRight
 	}
 
 	void build(){
@@ -143,13 +191,14 @@ class Dom extends VerticalGroup {
 		node.childNodes().each {
 			Dom child = parse(it)
 			child.parent = this
+			child.stage = stage
 			child.parse()
 
 			def container = new Container(child)
 			container.align(Align.bottomLeft)
 
 			if(child.widthValue)
-				container.width(child.widthValue)
+				container.width(Value.percentWidth(1))
 
 			if(child.needsRow){
 				row()
@@ -164,7 +213,6 @@ class Dom extends VerticalGroup {
 			child.build()
 			child.buildChild()
 		}
-
 	}
 
 }

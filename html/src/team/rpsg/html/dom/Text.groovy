@@ -1,9 +1,7 @@
 package team.rpsg.html.dom
 
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Container
-import com.badlogic.gdx.scenes.scene2d.ui.Value
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
@@ -39,7 +37,7 @@ class Text extends Dom {
 
 		text = (node as TextNode).text()
 		textColor = style("color", "white", ColorParser.&parse) as Color
-		fontSize = style("font-size", "16px", SizeParser.&parsePX) as int
+		fontSize = style("font-size", "16px", SizeParser.&parseFontPX) as int
 	}
 
 	void build() {
