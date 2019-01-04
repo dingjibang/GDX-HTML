@@ -2,9 +2,11 @@ package team.rpsg.html.dom
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Container
+import com.badlogic.gdx.utils.Align
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
+import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.ColorParser
 import team.rpsg.html.util.SizeParser
 
@@ -28,6 +30,8 @@ class Text extends Dom {
 	def text = ""
 	Color textColor = Color.WHITE
 
+	int textAlign = Align.left
+
 	Text(Node node) {
 		super(node)
 	}
@@ -38,6 +42,7 @@ class Text extends Dom {
 		text = (node as TextNode).text()
 		textColor = style("color", "white", ColorParser.&parse) as Color
 		fontSize = style("font-size", "16px", SizeParser.&parseFontPX) as int
+		textAlign = style("text-align", "center", AlignParser.&textAlign) as int
 	}
 
 	void build() {
@@ -45,8 +50,16 @@ class Text extends Dom {
 		def label = res.text.getLabel(text, fontSize)
 		label.color = textColor
 
+
+		align(Align.top)
+		current.align(Align.bottom)
+		parentContainer?.align(Align.center)
+		parentDom?.current?.align(Align.bottom)
+		parentDom?.align(Align.top)
+
+
 		def wrapProperty = style("-gdx-wrap", "false", {p -> p?.toString()})
-		def markup = style("-gdx-markup", "false", {p -> p?.toString().toBoolean()})
+		def markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})
 
 		if(markup)
 			label.style.font.data.markupEnabled = markup
@@ -54,9 +67,9 @@ class Text extends Dom {
 		if(wrapProperty && wrapProperty == "true"){
 			label.wrap = true
 
-			def conatiner = new Container(label)
-			conatiner.width(getParentDom().width)
-			current.addActor conatiner
+			def container = new Container(label).align(textAlign)
+			container.width(parentDom.width)
+			current.addActor container
 		}else {
 			current.addActor label
 		}

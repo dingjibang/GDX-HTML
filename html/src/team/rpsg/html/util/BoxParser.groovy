@@ -13,8 +13,15 @@ class BoxParser {
 
 		def padAll = dom.style("padding", null, {r -> r}, false) as CSSValueImpl
 
-		if(padAll && padAll.value instanceof List){
-			def values = padAll.value as List<CSSValueImpl>
+		if(padAll) {
+
+			List values = []
+
+			if (padAll.value instanceof List){
+				values = padAll.value as List
+			}else{
+				values << padAll
+			}
 
 			if(values.size() == 1) {
 				padLeft = padRight = padTop = padBottom = SizeParser.parse(values[0]).get(dom)

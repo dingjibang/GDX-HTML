@@ -1,6 +1,8 @@
 package script.ui.view
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.utils.Timer
 import org.jsoup.nodes.Document
 import team.rpsg.html.HTMLStage
 import team.rpsg.htmlTest.ui.view.View
@@ -14,6 +16,8 @@ class GameView extends View{
     }
 
     void init() {
+        if(this.stage != null)
+            ((HTMLStage)this.stage).dispose()
         this.stage = HTMLStage.buildPath("html/test.html")
     }
 
@@ -33,4 +37,9 @@ class GameView extends View{
         super.keyDown(keycode)
     }
 
+    void resize() {
+        if(this.stage != null)
+            init()
+        super.resize()
+    }
 }

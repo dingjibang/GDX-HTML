@@ -3,6 +3,7 @@ package team.rpsg.html.dom
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Value
@@ -16,6 +17,7 @@ import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
 import team.rpsg.html.manager.ResourceManager
+import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.BoxParser
 import team.rpsg.html.util.ColorParser
 import team.rpsg.html.util.SizeParser
@@ -43,6 +45,13 @@ class Dom extends VerticalGroup {
 	Color backgroundColor = null
 	SpriteDrawable backgroundDrawable = null
 
+	Container<Dom> parentContainer
+	Dom parentDom
+
+	int textAlign = Align.left
+	int boxAlign = Align.left
+	int verticalAlign = Align.bottom
+
 	Dom(){
 
 	}
@@ -50,6 +59,9 @@ class Dom extends VerticalGroup {
 	void setBackgroundColor(Color color){
 		backgroundColor = color
 		backgroundDrawable = color ? getRes().defaultDrawable(color) : null
+
+		if(this.clipBegin())
+			this.clipEnd()
 	}
 
 	void draw(Batch batch, float parentAlpha) {
@@ -63,13 +75,14 @@ class Dom extends VerticalGroup {
 		row()
 
 		Dom that = this
+		this.touchable = Touchable.enabled
 		this.addListener(new ClickListener(){
 			boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.bubbles = false
+				event.cancel()
 				println("==============")
 				println(that.node)
 				println(that.x + ", " + that.y + ", " + that.width + ", " + that.height)
-
+				return false
 			}
 		})
 	}
@@ -102,7 +115,7 @@ class Dom extends VerticalGroup {
 
 	void row(){
 		addActor(current = new HorizontalGroup())
-		current.align(Align.bottomLeft)
+		current.align(AlignParser.join(boxAlign, verticalAlign))
 	}
 
 	void parse(){
@@ -122,16 +135,21 @@ class Dom extends VerticalGroup {
 		BoxParser.parse this
 
 
-		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false)
+		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
 
-		def p = getParentDom()
-		if(!p)
+		textAlign = style("text-align", "center", AlignParser.&textAlign) as int
+		if(!needsRow){
+			parentDom?.current?.align(AlignParser.join(textAlign, verticalAlign))
+			parentDom?.align(AlignParser.join(textAlign, Align.top))
+		}
+
+		if(!parentDom)
 			return
 
 		if(widthValue != null){
-			width = widthValue.get(p)
+			width = widthValue.get(parentDom)
 		}else if(widthValue == null){
-			width = p.width
+			width = parentDom.width
 		}
 
 		println(node)
@@ -151,19 +169,6 @@ class Dom extends VerticalGroup {
 	void build(){
 	}
 
-	Dom getParentDom(_parent = null){
-		if(!_parent)
-			_parent = this
-
-		if(!_parent.parent)
-			return null
-
-		if(_parent.parent instanceof Dom)
-			return _parent.parent as Dom
-
-		return getParentDom(_parent.parent)
-	}
-
 	String toString(){
 		node.toString()
 	}
@@ -179,23 +184,23 @@ class Dom extends VerticalGroup {
 		if(!inherit)
 			return parser(orDefault)
 
-		def pDom = parentDom
-
-		if(!pDom)
+		if(!parentDom)
 			return parser(orDefault)
 
-		return pDom.style(name, orDefault, parser, inherit)
+		return parentDom.style(name, orDefault, parser, inherit)
 	}
 
 	def buildChild(){
 		node.childNodes().each {
 			Dom child = parse(it)
-			child.parent = this
+			child.parent = child.parentDom = this
 			child.stage = stage
 			child.parse()
 
 			def container = new Container(child)
-			container.align(Align.bottomLeft)
+			child.parentContainer = container
+
+			container.align(AlignParser.join(textAlign, verticalAlign))
 
 			if(child.widthValue)
 				container.width(Value.percentWidth(1))
