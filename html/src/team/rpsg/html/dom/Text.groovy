@@ -48,7 +48,7 @@ class Text extends Dom {
 	void build() {
 		super.build()
 		def label = res.text.getLabel(text, fontSize)
-		label.color = textColor
+		label.color = textColor ?: Color.WHITE
 
 
 		align(Align.top)

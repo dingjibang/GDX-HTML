@@ -15,10 +15,22 @@ class SizeParser {
 	 * font-size: 22px;
 	 * font-size: auto;
 	 */
+	@CompileStatic
 	static int parseFontPX(Object property){
+
 		if(property.toString().indexOf('%') > 0)
 			return 16
-		property.toString().replace("px", "").toInteger()
+		if(property.toString().equals("0"))
+			return 0
+		if(property.toString().indexOf('px') > 0)
+			return property.toString().replace("px", "").toInteger()?: 16
+		if(property.toString().indexOf('rem') > 0)
+			return ((property.toString().replace("rem", "").toFloat() * 16f)?: 16) as int
+		if(property.toString().indexOf('em') > 0)
+			return ((property.toString().replace("em", "").toFloat() * 16f)?: 16) as int
+
+		return 16
+
 	}
 
 	/**
@@ -27,11 +39,17 @@ class SizeParser {
 	 * width: auto;
 	 */
 	static Value parse(Object property){
+		if(property instanceof Float)
+			return new Value.Fixed(property.toFloat())
+
 		if(property instanceof CSSValueImpl && property.value instanceof LexicalUnitImpl){
 			def unit = property.value as LexicalUnitImpl
 
 			if(unit.lexicalUnitType == 17)
 				return new Value.Fixed(unit.floatValue)
+
+			if(unit.lexicalUnitType == 13 || property.toString().equals("0"))
+				return new Value.Fixed(0)
 
 			if(unit.lexicalUnitType == 23)
 				return percentInnerWidth((unit.floatValue / 100f) as float)

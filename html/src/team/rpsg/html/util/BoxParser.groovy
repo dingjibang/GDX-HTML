@@ -24,10 +24,15 @@ class BoxParser {
 			}
 
 			if(values.size() == 1) {
-				padLeft = padRight = padTop = padBottom = SizeParser.parse(values[0]).get(dom)
+				def v = SizeParser.parse(values[0])
+				if(v)
+					padLeft = padRight = padTop = padBottom = v.get(dom)
 			}else if(values.size() == 2){
-				padTop = padBottom = SizeParser.parse(values[0]).get(dom)
-				padLeft = padRight = SizeParser.parse(values[1]).get(dom)
+				def v0 = SizeParser.parse(values[0]), v1 = SizeParser.parse(values[1])
+				if(v0)
+					padTop = padBottom = v0.get(dom)
+				if(v1)
+					padLeft = padRight = v1.get(dom)
 			}
 		}
 

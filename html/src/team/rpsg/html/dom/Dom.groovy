@@ -152,10 +152,6 @@ class Dom extends VerticalGroup {
 			width = parentDom.width
 		}
 
-		println(node)
-		println(width)
-		println("===============")
-
 	}
 
 	float getWidth() {
@@ -177,6 +173,11 @@ class Dom extends VerticalGroup {
 		def result = null
 
 		node.allStyles.each {it.findAll({it.name == name}).each({result = it.value})}
+
+		if(result && result.toString().equals("inherit")){
+			inherit = true
+			result = null
+		}
 
 		if(result)
 			return parser(result)

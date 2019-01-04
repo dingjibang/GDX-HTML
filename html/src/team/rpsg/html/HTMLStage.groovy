@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable
 import com.steadystate.css.dom.CSSRuleListImpl
 import com.steadystate.css.dom.CSSStyleDeclarationImpl
 import com.steadystate.css.dom.CSSStyleRuleImpl
+import com.steadystate.css.dom.CSSUnknownRuleImpl
 import com.steadystate.css.parser.CSSOMParser
 import com.steadystate.css.parser.SACParserCSS3
 import groovy.transform.CompileStatic
@@ -30,11 +31,18 @@ class HTMLStage extends Stage{
 	Dom rootDom
 	ResourceManager res
 
+	boolean needsRefresh = false
+
 	List<String> styles = []
 
 	private HTMLStage(Document document) {
 		this.res = new ResourceManager()
 		this.document = document
+
+		def base = document.getElementsByTag("base")
+		if(base.size() != 0){
+			this.document.baseUri = base.last().attr("href")
+		}
 
 		forceBuild()
 	}
@@ -45,7 +53,11 @@ class HTMLStage extends Stage{
 
 		document.getElementsByTag("style").each {styles << it.childNode(0).toString()}
 		document.select("link[rel=\"stylesheet\"]").each {
-			styles << Gdx.files.internal(PathParser.parse(document, it.attr("href"))).readString(it.attr("charset") ?: "utf-8")
+			PathParser.get(document, it.attr("href"), it.attr("charset"), {String s, boolean needsUpdate ->
+				styles << s
+				if(needsUpdate)
+					joinStyles(s)
+			})
 		}
 
 
@@ -53,6 +65,10 @@ class HTMLStage extends Stage{
 
 		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
 
+		refresh()
+	}
+
+	void refresh(){
 		addActor(rootDom = new Root(document.body(), this))
 	}
 
@@ -65,16 +81,43 @@ class HTMLStage extends Stage{
 
 		CSSRuleListImpl rules = styleSheet.getCssRules() as CSSRuleListImpl
 		for(def i = 0; i < rules.getLength(); i++){
+			if(!(rules.item(i) instanceof CSSStyleRuleImpl))
+				continue
+
 			CSSStyleRuleImpl item = rules.item(i) as CSSStyleRuleImpl
 
 			for(def j = 0; j < item.selectors.getLength(); j++) {
 				Selector selector = item.selectors.item(j)
 
-				document.select(selector.toString())*.styles*.add ((item.style as CSSStyleDeclarationImpl).properties)
+				def s = selector.toString().trim()
+
+				if(s.indexOf(':') >= 0)
+					continue
+
+				if(s.length() == 0)
+					continue
+
+				//println "s: " + s + ", default: " + selector.toString()
+
+				try{
+					document.select(s)*.styles*.add ((item.style as CSSStyleDeclarationImpl).properties)
+				}catch(e){
+					e.printStackTrace()
+				}
+
 			}
 		}
+
+		needsRefresh = true
 	}
 
+	void draw() {
+		if(needsRefresh){
+			needsRefresh = false
+			refresh()
+		}
+		super.draw()
+	}
 
 	static HTMLStage buildHTML(String html, String uriPath = null){
 		def doc = Jsoup.parse(html)

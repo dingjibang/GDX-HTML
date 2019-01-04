@@ -14,7 +14,7 @@ import java.util.regex.Pattern
  */
 @CompileStatic
 class ColorParser {
-	static Color DEFAULT_VALUE = Color.WHITE
+	final static Color DEFAULT_VALUE = Color.WHITE
 
 	static Color parse(Object value, Color defaultColor = DEFAULT_VALUE){
 		if(value instanceof CSSValueImpl){
