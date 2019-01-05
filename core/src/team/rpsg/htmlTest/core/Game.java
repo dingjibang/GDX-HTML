@@ -22,13 +22,7 @@ public class Game {
 		return Gdx.graphics.getHeight();
 	}
 
-	public static GameView gameView;
-	
-	/**是否正在手机中运行*/
-	public static boolean isMobile(){
-		return Gdx.app.getType() == ApplicationType.Android || Gdx.app.getType() == ApplicationType.iOS;
-	}
-	
+
 	/**
 	 * 获取一个默认{@link Stage}，他将和{@link Views#batch}共用一个画笔。<br>
 	 * 要注意的是，这个画笔的{@link com.badlogic.gdx.graphics.g2d.Batch#setTransformMatrix(com.badlogic.gdx.math.Matrix4) transform}被改变的话，将可能导致接下来绘制的东西坐标出现异常。

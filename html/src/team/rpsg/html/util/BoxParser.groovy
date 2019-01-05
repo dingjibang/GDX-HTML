@@ -6,8 +6,8 @@ import com.steadystate.css.dom.CSSValueImpl
 import groovy.transform.CompileStatic
 import team.rpsg.html.dom.Dom
 
+@CompileStatic
 class BoxParser {
-	@CompileStatic
 	static void parse(Dom dom){
 		float padLeft = 0, padRight = 0, padTop = 0, padBottom = 0
 

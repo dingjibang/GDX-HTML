@@ -10,12 +10,12 @@ import team.rpsg.html.dom.Dom
 /**
  * unit(px or %) parser
  */
+@CompileStatic
 class SizeParser {
 	/**
 	 * font-size: 22px;
 	 * font-size: auto;
 	 */
-	@CompileStatic
 	static int parseFontPX(Object property){
 
 		if(property.toString().indexOf('%') > 0)
@@ -67,7 +67,7 @@ class SizeParser {
 	}
 
 	@CompileStatic
-	static Value percentInnerWidth(percent){
+	static Value percentInnerWidth(float percent){
 		return new Value() {
 			float get (Actor actor) {
 				(actor as Dom).innerWidth * percent

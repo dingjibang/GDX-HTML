@@ -6,17 +6,16 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Pools
+import groovy.transform.CompileStatic
 import team.rpsg.lazyFont.LazyBitmapFont
 
+@CompileStatic
 class TextManager {
 	private Map<Param, LazyBitmapFont> map = new HashMap<>()
 
 	FreeTypeFontGenerator NORMAL_GENERATOR = new FreeTypeFontGenerator(Gdx.files.internal("font/xyj.ttf"))
 	FreeTypeFontGenerator ENGLISH_GENERATOR = new FreeTypeFontGenerator(Gdx.files.internal("font/Coold.ttf"))
 
-	TextManager() {
-		LazyBitmapFont.setGlobalGenerator(NORMAL_GENERATOR)
-	}
 
 	LazyBitmapFont get(int fontSize, FreeTypeFontGenerator gen) {
 		LazyBitmapFont font = null
@@ -26,7 +25,7 @@ class TextManager {
 				font = map.get(k)
 
 		if (font == null) {
-			font = gen == null ? new LazyBitmapFont(fontSize) : new LazyBitmapFont(gen, fontSize)
+			font = gen == null ? new LazyBitmapFont(NORMAL_GENERATOR, fontSize) : new LazyBitmapFont(gen, fontSize)
 			map.put(new Param(fontSize, gen), font)
 		}
 
@@ -73,5 +72,10 @@ class TextManager {
 		GlyphLayout layout = Pools.obtain(GlyphLayout.class)
 		layout.setText(font, str)
 		return (int) layout.width
+	}
+
+	void dispose(){
+		NORMAL_GENERATOR.dispose()
+		ENGLISH_GENERATOR.dispose()
 	}
 }

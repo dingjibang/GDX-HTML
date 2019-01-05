@@ -22,10 +22,6 @@ public class Text {
 	public FreeTypeFontGenerator NORMAL_GENERATOR = new FreeTypeFontGenerator(Gdx.files.internal(team.rpsg.htmlTest.core.Path.BASE_PATH + "font/xyj.ttf"));
 	public FreeTypeFontGenerator ENGLISH_GENERATOR = new FreeTypeFontGenerator(Gdx.files.internal(team.rpsg.htmlTest.core.Path.BASE_PATH + "font/Coold.ttf"));
 
-	public Text() {
-		LazyBitmapFont.setGlobalGenerator(NORMAL_GENERATOR);
-	}
-
 	public LazyBitmapFont get(int fontSize, FreeTypeFontGenerator gen) {
 
 		LazyBitmapFont font = null;
@@ -34,7 +30,7 @@ public class Text {
 				font = map.get(k);
 
 		if (font == null) {
-			font = gen == null ? new LazyBitmapFont(fontSize) : new LazyBitmapFont(gen, fontSize);
+			font = gen == null ? new LazyBitmapFont(NORMAL_GENERATOR, fontSize) : new LazyBitmapFont(gen, fontSize);
 			map.put(new Param(fontSize, gen), font);
 		}
 

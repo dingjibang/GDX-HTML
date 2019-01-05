@@ -31,17 +31,9 @@ public class LazyBitmapFont extends BitmapFont {
 	private FreeTypeBitmapFontData data;
 	private FreeTypeFontParameter parameter;
 
-	private static FreeTypeFontGenerator GLOBAL_GEN = null;
 
 	public final int fontSize;
 
-	public static void setGlobalGenerator(FreeTypeFontGenerator generator) {
-		GLOBAL_GEN = generator;
-	}
-
-	public LazyBitmapFont(int fontSize) {
-		this(GLOBAL_GEN, fontSize);
-	}
 
 	public LazyBitmapFont(FreeTypeFontGenerator generator, int fontSize) {
 		this.fontSize = fontSize;

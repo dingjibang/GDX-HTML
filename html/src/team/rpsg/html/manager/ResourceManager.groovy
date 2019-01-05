@@ -91,6 +91,8 @@ class ResourceManager {
 	/**卸载全部纹理*/
 	void dispose(){
 		assetManager.dispose()
+		text.dispose()
+		defaultSpriteDrawable.sprite.texture.dispose()
 	}
 
 }

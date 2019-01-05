@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import com.steadystate.css.dom.CSSValueImpl
+import groovy.transform.CompileStatic
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
@@ -33,6 +34,7 @@ import team.rpsg.html.util.SizeParser
  * Dom包含了一些基本的css属性，比如宽度，padding，margin，display之类的。<br/>
  * 顺便一提的是，"display: block;"的实现是很丑陋的hhhh
  */
+@CompileStatic
 class Dom extends VerticalGroup {
 	HorizontalGroup current
 	Node node
@@ -123,7 +125,9 @@ class Dom extends VerticalGroup {
 
 		switch (display.toLowerCase()){
 			case "block":
-				needsRow = true
+				needsRow = true; break
+			case "none":
+				visible = false; break
 		}
 
 
@@ -136,6 +140,10 @@ class Dom extends VerticalGroup {
 
 
 		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
+		if(!widthValue)
+			widthValue = style("max-width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
+		if(!widthValue)
+			widthValue = style("min-width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
 
 		textAlign = style("text-align", "center", AlignParser.&textAlign) as int
 		if(!needsRow){
@@ -169,7 +177,7 @@ class Dom extends VerticalGroup {
 		node.toString()
 	}
 
-	def style(String name, orDefault = null, parser = {r -> r}, inherit = true){
+	def style(String name, orDefault = null, Closure parser = {r -> r}, inherit = true){
 		def result = null
 
 		node.allStyles.each {it.findAll({it.name == name}).each({result = it.value})}

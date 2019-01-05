@@ -2,12 +2,14 @@ package team.rpsg.html.dom
 
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.utils.Align
+import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import team.rpsg.html.HTMLStage
 
 /**
  * rootDom = html document
  */
+@CompileStatic
 class Root extends Dom{
 
 	Root(Node node, HTMLStage stage){

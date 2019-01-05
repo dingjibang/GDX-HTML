@@ -25,6 +25,9 @@ import team.rpsg.html.util.PathParser
  * GDX-HTML<br>
  *     using HTMLStage.buildPath(path-to-file) to create your first stage.
  */
+
+
+@CompileStatic
 class HTMLStage extends Stage{
 
 	Document document
@@ -73,7 +76,6 @@ class HTMLStage extends Stage{
 	}
 
 
-	@CompileStatic
 	void joinStyles(String style = null){
 		InputSource source = new InputSource(new StringReader(style ?: styles.join("\n")))
 		CSSOMParser parser = new CSSOMParser(new SACParserCSS3())
@@ -137,6 +139,8 @@ class HTMLStage extends Stage{
 	}
 
 	void dispose() {
+		document = null
+		rootDom = null
 		res.dispose()
 		super.dispose()
 	}

@@ -1,8 +1,10 @@
 package team.rpsg.html.dom
 
 import com.steadystate.css.dom.Property
+import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 
+@CompileStatic
 class HTMLDom extends Dom {
 	private String tagName
 
