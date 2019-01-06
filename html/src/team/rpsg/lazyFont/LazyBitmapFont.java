@@ -13,9 +13,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeBitmapFontData;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.GlyphAndBitmap;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * GDX-LAZY-FONT for LibGDX 1.5.0+<br/>
@@ -133,6 +136,7 @@ public class LazyBitmapFont extends BitmapFont {
 		//modified by STH99 on 2017-8-8
 
 		LazyBitmapFontTexture lazyBitmapFontTexture;
+		List<LazyBitmapFontTexture> allLazyBitmapFontTexture = new ArrayList<>();
 
 		public LazyBitmapFontData(FreeTypeFontGenerator generator, int fontSize, LazyBitmapFont lbf) {
 			this.generator = generator;
@@ -158,16 +162,18 @@ public class LazyBitmapFont extends BitmapFont {
 			Pixmap map = gab.bitmap.getPixmap(Format.RGBA8888, Color.WHITE, 1.0f);
 
 			TextureRegion rg = null;
-				 if(lazyBitmapFontTexture == null)
-				 	lazyBitmapFontTexture = new LazyBitmapFontTexture();
+			if(lazyBitmapFontTexture == null)
+				newLazyBitmapFontTexture();
 
-				rg = lazyBitmapFontTexture.draw(map);
-				if(rg == null)
-					rg = (lazyBitmapFontTexture = new LazyBitmapFontTexture()).draw(map);
+			rg = lazyBitmapFontTexture.draw(map);
+			if(rg == null)
+				rg = newLazyBitmapFontTexture().draw(map);
 
-				map.dispose();
+			map.dispose();
 
-				font.getRegions().add(rg);
+			gab.bitmap = null;
+
+			font.getRegions().add(rg);
 
 
 			gab.glyph.page = page++;
@@ -178,13 +184,25 @@ public class LazyBitmapFont extends BitmapFont {
 
 		}
 
+		private LazyBitmapFontTexture newLazyBitmapFontTexture(){
+			LazyBitmapFontTexture tex = new LazyBitmapFontTexture();
+			allLazyBitmapFontTexture.add(tex);
+			lazyBitmapFontTexture = tex;
+			return tex;
+		}
+
+		public void dispose() {
+			super.dispose();
+			for(LazyBitmapFontTexture tex : allLazyBitmapFontTexture)
+				tex.dispose();
+		}
 	}
 
 
-	private static class LazyBitmapFontTexture{
+	private static class LazyBitmapFontTexture implements Disposable {
 
-		private static final int WIDTH = 128;
-		private static final int HEIGHT = 128;
+		private static final int WIDTH = 256;
+		private static final int HEIGHT = 256;
 		//加入5像素间距，防止纹理放大后产生花边
 		private static final int PADDING = 5;
 
@@ -193,7 +211,9 @@ public class LazyBitmapFont extends BitmapFont {
 		private int currX = 0, currY = 0, lineHeight = 0;
 
 		LazyBitmapFontTexture(){
-			tex = new Texture(new Pixmap(WIDTH, HEIGHT, Format.RGBA8888));
+			Pixmap pxm = new Pixmap(WIDTH, HEIGHT, Format.RGBA8888);
+			tex = new Texture(pxm);
+			pxm.dispose();
 			tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 		}
 
@@ -231,6 +251,10 @@ public class LazyBitmapFont extends BitmapFont {
 
 
 			return reg;
+		}
+
+		public void dispose(){
+			tex.dispose();
 		}
 
 	}

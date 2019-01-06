@@ -77,5 +77,7 @@ class TextManager {
 	void dispose(){
 		NORMAL_GENERATOR.dispose()
 		ENGLISH_GENERATOR.dispose()
+
+		map.each {k, v -> v.dispose()}
 	}
 }

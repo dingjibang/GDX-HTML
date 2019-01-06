@@ -121,6 +121,11 @@ class HTMLStage extends Stage{
 		super.draw()
 	}
 
+	void act() {
+		res.act()
+		super.act()
+	}
+
 	static HTMLStage buildHTML(String html, String uriPath = null){
 		def doc = Jsoup.parse(html)
 

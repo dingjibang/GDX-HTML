@@ -34,12 +34,15 @@ class GameView extends View{
         if(keycode == Input.Keys.R)
             init()
 
+        if(keycode == Input.Keys.L)
+            team.rpsg.htmlTest.util.Timer.add(team.rpsg.htmlTest.util.Timer.TimeType.frame, 20, team.rpsg.htmlTest.util.Timer.FOREVER, this.&init)
+
         super.keyDown(keycode)
     }
 
     void resize() {
-        if(this.stage != null)
-            init()
-        super.resize()
+//        if(this.stage != null)
+//            init()
+//        super.resize()
     }
 }
