@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
-import com.steadystate.css.dom.CSSValueImpl
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
@@ -54,12 +53,13 @@ class Dom extends VerticalGroup {
 	int boxAlign = Align.left
 	int verticalAlign = Align.bottom
 
+	static Dom temp = null
+
 	Dom(){
 
 	}
 
-	void setBackgroundColor(Color color){
-		backgroundColor = color
+	void applyBackgroundColor(Color color){
 		backgroundDrawable = color ? getRes().defaultDrawable(color) : null
 
 		if(this.clipBegin())
@@ -73,7 +73,7 @@ class Dom extends VerticalGroup {
 
 	Dom(Node node){
 		this.node = node
-		align(Align.topLeft)
+		align(AlignParser.join(boxAlign, Align.top))
 		row()
 
 		Dom that = this
@@ -84,6 +84,12 @@ class Dom extends VerticalGroup {
 				println("==============")
 				println(that.node)
 				println(that.x + ", " + that.y + ", " + that.width + ", " + that.height)
+				println("align: ${AlignParser.toString(that.align)}, " +
+						"current: ${AlignParser.toString(current.align)}, " +
+						"parent: ${AlignParser.toString(parentDom ? parentDom.align : -1)}, " +
+						"cparent: ${AlignParser.toString(parentDom ? parentDom.current.align : -1)}")
+				println("textAlign: ${AlignParser.toString(that.textAlign)}, " +
+						"mAlign: ${AlignParser.toString(that.boxAlign)}")
 				return false
 			}
 		})
@@ -117,11 +123,11 @@ class Dom extends VerticalGroup {
 
 	void row(){
 		addActor(current = new HorizontalGroup())
-		current.align(AlignParser.join(boxAlign, verticalAlign))
+		current.align(AlignParser.join(textAlign, verticalAlign))
 	}
 
 	void parse(){
-        display = style("display", "inline", {r -> r}, false)
+		display = style("display", "inline", {r -> r}, false)
 
 		switch (display.toLowerCase()){
 			case "block":
@@ -131,12 +137,15 @@ class Dom extends VerticalGroup {
 		}
 
 
-		def bg = style("background-color", null, {r -> ColorParser.parse(r, null)}, false)
-		if(bg)
-			setBackgroundColor(bg as Color)
+		this.backgroundColor = style("background-color", null, {r -> ColorParser.parse(r, null)}, false) as Color
 
-		//parse padding
-		BoxParser.parse this
+		//parsePadding padding
+		BoxParser.parsePadding this
+		def parsed = BoxParser.parseMargin this
+		if(parsed == BoxParser.NEEDS_SET_ALIGN){
+			parentDom?.current?.align(AlignParser.join(boxAlign, verticalAlign))
+			parentDom?.align(AlignParser.join(boxAlign, Align.top))
+		}
 
 
 		widthValue = style("width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
@@ -145,19 +154,18 @@ class Dom extends VerticalGroup {
 		if(!widthValue)
 			widthValue = style("min-width", display == "block" ? "100%" : "auto", SizeParser.&parse, false) as Value
 
-		textAlign = style("text-align", "center", AlignParser.&textAlign) as int
-		if(!needsRow){
-			parentDom?.current?.align(AlignParser.join(textAlign, verticalAlign))
-			parentDom?.align(AlignParser.join(textAlign, Align.top))
-		}
+		textAlign = style("text-align", "left", AlignParser.&textAlign) as int
+
+		current.align(AlignParser.join(textAlign, verticalAlign))
+		align(AlignParser.join(textAlign, Align.top))
 
 		if(!parentDom)
 			return
 
 		if(widthValue != null){
-			width = widthValue.get(parentDom)
+			width = (widthValue.get(parentDom) - marginLeftRight) as float
 		}else if(widthValue == null){
-			width = parentDom.width
+			width = parentDom.innerWidth
 		}
 
 	}
@@ -170,7 +178,13 @@ class Dom extends VerticalGroup {
 		super.width - padLeft - padRight
 	}
 
+	float getMarginLeftRight(){
+		parentContainer ? parentContainer.padLeft + parentContainer.padRight : 0
+	}
+
 	void build(){
+		if(backgroundColor)
+			applyBackgroundColor(backgroundColor)
 	}
 
 	String toString(){
@@ -204,12 +218,13 @@ class Dom extends VerticalGroup {
 			Dom child = parse(it)
 			child.parent = child.parentDom = this
 			child.stage = stage
-			child.parse()
 
 			def container = new Container(child)
 			child.parentContainer = container
 
-			container.align(AlignParser.join(textAlign, verticalAlign))
+			child.parse()
+
+
 
 			if(child.widthValue)
 				container.width(Value.percentWidth(1))
@@ -218,6 +233,8 @@ class Dom extends VerticalGroup {
 				row()
 				current.addActor(container)
 				row()
+			}else if(child.display == "inline-block"){
+				current.addActor(container)
 			}else{
 				current.addActor(child)
 			}

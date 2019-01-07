@@ -30,7 +30,6 @@ class Text extends Dom {
 	def text = ""
 	Color textColor = Color.WHITE
 
-	int textAlign = Align.left
 
 	Text(Node node) {
 		super(node)
@@ -42,21 +41,12 @@ class Text extends Dom {
 		text = (node as TextNode).text()
 		textColor = style("color", "white", ColorParser.&parse) as Color
 		fontSize = style("font-size", "16px", SizeParser.&parseFontPX) as int
-		textAlign = style("text-align", "center", AlignParser.&textAlign) as int
 	}
 
 	void build() {
 		super.build()
 		def label = res.text.getLabel(text, fontSize)
 		label.color = textColor ?: Color.WHITE
-
-
-		align(Align.top)
-		current.align(Align.bottom)
-		parentContainer?.align(Align.center)
-		parentDom?.current?.align(Align.bottom)
-		parentDom?.align(Align.top)
-
 
 		def wrapProperty = style("-gdx-wrap", "false", {p -> p?.toString()})
 		def markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})

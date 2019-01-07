@@ -1,8 +1,53 @@
 body{
-    background-color: #000045;
-    color: white;
+    background-color: white;
+    color: #333;
     font-family: Microsoft YaHei;
     margin: 0;
 }
 
 
+.cd{
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 100px;
+    display: table;
+}
+
+.left, .right{
+    margin: 0 auto;
+    display: inline-block;
+    width: 418px;
+    vertical-align: middle;
+}
+
+.left{
+    text-align: left;
+}
+
+.right{
+    text-align: right;
+    padding-bottom: 50px;
+}
+
+.title{
+    margin-bottom: 10px;
+    display: inline-block;
+    font-size: 24px;
+}
+
+.mtitle{
+    font-size: 46px;
+}
+
+.desc{
+    padding-top: 50px;
+    -gdx-wrap:true;
+    -gdx-markup: true;
+    color: white;
+}
+
+.right div{
+    font-size: 26px;
+    padding: 8px 10px;
+    background-color: azure;
+}

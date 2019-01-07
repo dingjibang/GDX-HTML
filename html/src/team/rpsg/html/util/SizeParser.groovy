@@ -38,7 +38,11 @@ class SizeParser {
 	 * width: 65px;
 	 * width: auto;
 	 */
-	static Value parse(Object property){
+	static Value parse(Object property, parseAutoValue = false){
+
+		if(parseAutoValue && property && property.toString().equalsIgnoreCase("auto"))
+			return new AutoValue()
+
 		if(property instanceof Float)
 			return new Value.Fixed(property.toFloat())
 
@@ -72,6 +76,12 @@ class SizeParser {
 			float get (Actor actor) {
 				(actor as Dom).innerWidth * percent
 			}
+		}
+	}
+
+	static class AutoValue extends Value{
+		float get(Actor context) {
+			return 0
 		}
 	}
 }

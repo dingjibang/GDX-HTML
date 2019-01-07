@@ -26,4 +26,19 @@ class AlignParser {
 
 		return tb | lr
 	}
+
+	static String toString(int align){
+		switch (align){
+			case Align.center : return "center"
+			case Align.left : return "left"
+			case Align.right : return "right"
+			case Align.bottom : return "bottom"
+			case Align.bottomLeft : return "bottomLeft"
+			case Align.bottomRight : return "bottomRight"
+			case Align.top : return "top"
+			case Align.topLeft : return "topLeft"
+			case Align.topRight : return "topRight"
+			default: return "UNKNOWN(" + align + ")"
+		}
+	}
 }

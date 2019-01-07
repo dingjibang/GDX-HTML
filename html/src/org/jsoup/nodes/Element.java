@@ -140,7 +140,7 @@ public class Element extends Node {
      */
     public Element tagName(String tagName) {
         Validate.notEmpty(tagName, "Tag name must not be empty.");
-        tag = Tag.valueOf(tagName, NodeUtils.parser(this).settings()); // maintains the case option of the original parse
+        tag = Tag.valueOf(tagName, NodeUtils.parser(this).settings()); // maintains the case option of the original parsePadding
         return this;
     }
 
@@ -1440,7 +1440,7 @@ public class Element extends Node {
     
     /**
      * Set this element's inner HTML. Clears the existing HTML first.
-     * @param html HTML to parse and set into this element
+     * @param html HTML to parsePadding and set into this element
      * @return this element
      * @see #append(String)
      */

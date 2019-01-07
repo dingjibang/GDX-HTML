@@ -304,7 +304,7 @@ public class Elements extends ArrayList<Element> {
     
     /**
      * Set the inner HTML of each matched element.
-     * @param html HTML to parse and set into each matched element.
+     * @param html HTML to parsePadding and set into each matched element.
      * @return this, for chaining
      * @see Element#html(String)
      */

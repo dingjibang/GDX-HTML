@@ -9,7 +9,7 @@ import java.io.StringReader;
 import java.util.List;
 
 /**
- * Parses HTML into a {@link Document}. Generally best to use one of the  more convenient parse methods
+ * Parses HTML into a {@link Document}. Generally best to use one of the  more convenient parsePadding methods
  * in {@link org.jsoup.Jsoup}.
  */
 public class Parser {
@@ -19,7 +19,7 @@ public class Parser {
 
     /**
      * Create a new Parser, using the specified TreeBuilder
-     * @param treeBuilder TreeBuilder to use to parse input into Documents.
+     * @param treeBuilder TreeBuilder to use to parsePadding input into Documents.
      */
     public Parser(TreeBuilder treeBuilder) {
         this.treeBuilder = treeBuilder;
@@ -59,7 +59,7 @@ public class Parser {
     }
 
     /**
-     * Check if parse error tracking is enabled.
+     * Check if parsePadding error tracking is enabled.
      * @return current track error state.
      */
     public boolean isTrackErrors() {
@@ -67,7 +67,7 @@ public class Parser {
     }
 
     /**
-     * Enable or disable parse error tracking for the next parse.
+     * Enable or disable parsePadding error tracking for the next parsePadding.
      * @param maxErrors the maximum number of errors to track. Set to 0 to disable.
      * @return this, for chaining
      */
@@ -77,8 +77,8 @@ public class Parser {
     }
 
     /**
-     * Retrieve the parse errors, if any, from the last parse.
-     * @return list of parse errors, up to the size of the maximum errors tracked.
+     * Retrieve the parsePadding errors, if any, from the last parsePadding.
+     * @return list of parsePadding errors, up to the size of the maximum errors tracked.
      */
     public ParseErrorList getErrors() {
         return errors;
@@ -93,11 +93,11 @@ public class Parser {
         return settings;
     }
 
-    // static parse functions below
+    // static parsePadding functions below
     /**
      * Parse HTML into a Document.
      *
-     * @param html HTML to parse
+     * @param html HTML to parsePadding
      * @param baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
      *
      * @return parsed Document
@@ -110,7 +110,7 @@ public class Parser {
     /**
      * Parse a fragment of HTML into a list of nodes. The context element, if supplied, supplies parsing context.
      *
-     * @param fragmentHtml the fragment of HTML to parse
+     * @param fragmentHtml the fragment of HTML to parsePadding
      * @param context (optional) the element that this HTML fragment is being parsed for (i.e. for inner HTML). This
      * provides stack context (for implicit element creation).
      * @param baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
@@ -125,7 +125,7 @@ public class Parser {
     /**
      * Parse a fragment of HTML into a list of nodes. The context element, if supplied, supplies parsing context.
      *
-     * @param fragmentHtml the fragment of HTML to parse
+     * @param fragmentHtml the fragment of HTML to parsePadding
      * @param context (optional) the element that this HTML fragment is being parsed for (i.e. for inner HTML). This
      * provides stack context (for implicit element creation).
      * @param baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
@@ -143,7 +143,7 @@ public class Parser {
     /**
      * Parse a fragment of XML into a list of nodes.
      *
-     * @param fragmentXml the fragment of XML to parse
+     * @param fragmentXml the fragment of XML to parsePadding
      * @param baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
      * @return list of nodes parsed from the input XML.
      */
@@ -186,7 +186,7 @@ public class Parser {
     }
 
     /**
-     * @param bodyHtml HTML to parse
+     * @param bodyHtml HTML to parsePadding
      * @param baseUri baseUri base URI of document (i.e. original fetch location), for resolving relative URLs.
      *
      * @return parsed Document

@@ -203,7 +203,7 @@ public class QueryParser {
         else if (tq.matchChomp(":matchText"))
             evals.add(new Evaluator.MatchText());
 		else // unhandled
-            throw new Selector.SelectorParseException("Could not parse query '%s': unexpected token at '%s'", query, tq.remainder());
+            throw new Selector.SelectorParseException("Could not parsePadding query '%s': unexpected token at '%s'", query, tq.remainder());
 
     }
 
@@ -266,7 +266,7 @@ public class QueryParser {
             else if (cq.matchChomp("~="))
                 evals.add(new Evaluator.AttributeWithValueMatching(key, Pattern.compile(cq.remainder())));
             else
-                throw new Selector.SelectorParseException("Could not parse attribute query '%s': unexpected token at '%s'", query, cq.remainder());
+                throw new Selector.SelectorParseException("Could not parsePadding attribute query '%s': unexpected token at '%s'", query, cq.remainder());
         }
     }
 
@@ -309,7 +309,7 @@ public class QueryParser {
 			a = 0;
 			b = Integer.parseInt(mB.group().replaceFirst("^\\+", ""));
 		} else {
-			throw new Selector.SelectorParseException("Could not parse nth-index '%s': unexpected format", argS);
+			throw new Selector.SelectorParseException("Could not parsePadding nth-index '%s': unexpected format", argS);
 		}
 		if (ofType)
 			if (backwards)

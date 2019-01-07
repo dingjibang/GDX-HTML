@@ -47,7 +47,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
     private boolean baseUriSetFromDoc;
     private Element headElement; // the current head element
     private FormElement formElement; // the current form element
-    private Element contextElement; // fragment parse context -- could be null even if fragment parsing
+    private Element contextElement; // fragment parsePadding context -- could be null even if fragment parsing
     private ArrayList<Element> formattingElements; // active (open) formatting elements
     private List<String> pendingTableCharacters; // chars in table to be shifted out
     private Token.EndTag emptyEnd; // reused empty end tag
@@ -174,7 +174,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
     }
 
     void maybeSetBaseUri(Element base) {
-        if (baseUriSetFromDoc) // only listen to the first <base href> in parse
+        if (baseUriSetFromDoc) // only listen to the first <base href> in parsePadding
             return;
 
         String href = base.absUrl("href");

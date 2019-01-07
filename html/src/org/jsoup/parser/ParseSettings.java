@@ -26,7 +26,7 @@ public class ParseSettings {
     private final boolean preserveAttributeCase;
 
     /**
-     * Define parse settings.
+     * Define parsePadding settings.
      * @param tag preserve tag case?
      * @param attribute preserve attribute name case?
      */

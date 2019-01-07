@@ -824,7 +824,7 @@ public class HttpConnection implements Connection {
 
         public Document parse() throws IOException {
             Validate.isTrue(executed, "Request must be executed (with .execute(), .get(), or .post() before parsing response");
-            if (byteData != null) { // bytes have been read in to the buffer, parse that
+            if (byteData != null) { // bytes have been read in to the buffer, parsePadding that
                 bodyStream = new ByteArrayInputStream(byteData.array());
                 inputStreamRead = false; // ok to reparse if in bytes
             }
@@ -839,7 +839,7 @@ public class HttpConnection implements Connection {
         private void prepareByteData() {
             Validate.isTrue(executed, "Request must be executed (with .execute(), .get(), or .post() before getting response body");
             if (byteData == null) {
-                Validate.isFalse(inputStreamRead, "Request has already been read (with .parse())");
+                Validate.isFalse(inputStreamRead, "Request has already been read (with .parsePadding())");
                 try {
                     byteData = DataUtil.readToByteBuffer(bodyStream, req.maxBodySize());
                 } catch (IOException e) {
@@ -853,7 +853,7 @@ public class HttpConnection implements Connection {
 
         public String body() {
             prepareByteData();
-            // charset gets set from header on execute, and from meta-equiv on parse. parse may not have happened yet
+            // charset gets set from header on execute, and from meta-equiv on parsePadding. parsePadding may not have happened yet
             String body;
             if (charset == null)
                 body = Charset.forName(DataUtil.defaultCharset).decode(byteData).toString();

@@ -56,7 +56,7 @@ public final class DataUtil {
 
     /**
      * Parses a Document from an input steam.
-     * @param in input stream to parse. You will need to close it.
+     * @param in input stream to parsePadding. You will need to close it.
      * @param charsetName character set of input
      * @param baseUri base URI of document, to resolve relative links against
      * @return Document
@@ -68,7 +68,7 @@ public final class DataUtil {
 
     /**
      * Parses a Document from an input steam, using the provided Parser.
-     * @param in input stream to parse. You will need to close it.
+     * @param in input stream to parsePadding. You will need to close it.
      * @param charsetName character set of input
      * @param baseUri base URI of document, to resolve relative links against
      * @param parser alternate {@link Parser#xmlParser() parser} to use.
@@ -112,7 +112,7 @@ public final class DataUtil {
         if (bomCharset != null)
             charsetName = bomCharset.charset;
 
-        if (charsetName == null) { // determine from meta. safe first parse as UTF-8
+        if (charsetName == null) { // determine from meta. safe first parsePadding as UTF-8
             String docData = Charset.forName(defaultCharset).decode(firstBytes).toString();
             doc = parser.parseInput(docData, baseUri);
 
@@ -153,7 +153,7 @@ public final class DataUtil {
                 doc = null;
             }
         } else { // specified by content type header (or by user on file load)
-            Validate.notEmpty(charsetName, "Must set charset arg to character set of file to parse. Set to null to attempt to detect from HTML");
+            Validate.notEmpty(charsetName, "Must set charset arg to character set of file to parsePadding. Set to null to attempt to detect from HTML");
         }
         if (doc == null) {
             if (charsetName == null)

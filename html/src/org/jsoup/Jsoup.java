@@ -22,7 +22,7 @@ public class Jsoup {
     /**
      Parse HTML into a Document. The parser will make a sensible, balanced document tree out of any HTML.
 
-     @param html    HTML to parse
+     @param html    HTML to parsePadding
      @param baseUri The URL where the HTML was retrieved from. Used to resolve relative URLs to absolute URLs, that occur
      before the HTML declares a {@code <base href>} tag.
      @return sane HTML
@@ -35,7 +35,7 @@ public class Jsoup {
      Parse HTML into a Document, using the provided Parser. You can provide an alternate parser, such as a simple XML
      (non-HTML) parser.
 
-     @param html    HTML to parse
+     @param html    HTML to parsePadding
      @param baseUri The URL where the HTML was retrieved from. Used to resolve relative URLs to absolute URLs, that occur
      before the HTML declares a {@code <base href>} tag.
      @param parser alternate {@link Parser#xmlParser() parser} to use.
@@ -49,7 +49,7 @@ public class Jsoup {
      Parse HTML into a Document. As no base URI is specified, absolute URL detection relies on the HTML including a
      {@code <base href>} tag.
 
-     @param html HTML to parse
+     @param html HTML to parsePadding
      @return sane HTML
 
      @see #parse(String, String)
@@ -59,7 +59,7 @@ public class Jsoup {
     }
 
     /**
-     * Creates a new {@link Connection} to a URL. Use to fetch and parse a HTML page.
+     * Creates a new {@link Connection} to a URL. Use to fetch and parsePadding a HTML page.
      * <p>
      * Use examples:
      * <ul>
@@ -104,7 +104,7 @@ public class Jsoup {
     }
 
      /**
-     Read an input stream, and parse it to a Document.
+     Read an input stream, and parsePadding it to a Document.
 
      @param in          input stream to read. Make sure to close it after parsing.
      @param charsetName (optional) character set of file contents. Set to {@code null} to determine from {@code http-equiv} meta tag, if
@@ -119,7 +119,7 @@ public class Jsoup {
     }
 
     /**
-     Read an input stream, and parse it to a Document. You can provide an alternate parser, such as a simple XML
+     Read an input stream, and parsePadding it to a Document. You can provide an alternate parser, such as a simple XML
      (non-HTML) parser.
 
      @param in          input stream to read. Make sure to close it after parsing.
@@ -161,7 +161,7 @@ public class Jsoup {
     }
 
     /**
-     Fetch a URL, and parse it as HTML. Provided for compatibility; in most cases use {@link #connect(String)} instead.
+     Fetch a URL, and parsePadding it as HTML. Provided for compatibility; in most cases use {@link #connect(String)} instead.
      <p>
      The encoding character set is determined by the content-type header or http-equiv meta tag, or falls back to {@code UTF-8}.
 

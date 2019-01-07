@@ -7,12 +7,12 @@ import org.jsoup.nodes.Document
 
 
 /**
- * parse path
+ * parsePadding path
  */
 @CompileStatic
 class PathParser {
 	/**
-	 * parse path by document baseURI, return absolute(assets root) path<br/>
+	 * parsePadding path by document baseURI, return absolute(assets root) path<br/>
 	 * <pre>
 	 * assets
 	 * ├── img
@@ -21,8 +21,8 @@ class PathParser {
 	 * │   ├── 1.html
 	 * │   └── 2.html
 	 * </pre>
-	 * assert PathParser.parse(doc, "../img/1.jpg") == "/img/1.jpg"; <br/>
-	 * assert PathParser.parse(doc, "2.html") == "/html/2.html"; <br/>
+	 * assert PathParser.parsePadding(doc, "../img/1.jpg") == "/img/1.jpg"; <br/>
+	 * assert PathParser.parsePadding(doc, "2.html") == "/html/2.html"; <br/>
 	 */
 	static String parse(Document document, String path){
 		return new URI(document.baseUri() ?: "/").resolve(new URI(path)).toString()

@@ -18,7 +18,7 @@ import java.util.List;
  @author Jonathan Hedley, jonathan@hedley.net */
 public class Document extends Element {
     private OutputSettings outputSettings = new OutputSettings();
-    private Parser parser; // the parser used to parse this document
+    private Parser parser; // the parser used to parsePadding this document
     private QuirksMode quirksMode = QuirksMode.noQuirks;
     private String location;
     private boolean updateMetaCharset = false;
@@ -111,7 +111,7 @@ public class Document extends Element {
     }
 
     /**
-     Normalise the document. This happens after the parse phase so generally does not need to be called.
+     Normalise the document. This happens after the parsePadding phase so generally does not need to be called.
      Moves any text content that is not in the body element into the body.
      @return this document after normalisation
      */
@@ -578,7 +578,7 @@ public class Document extends Element {
     }
 
     /**
-     * Get the parser that was used to parse this document.
+     * Get the parser that was used to parsePadding this document.
      * @return the parser
      */
     public Parser parser() {

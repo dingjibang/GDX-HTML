@@ -167,7 +167,7 @@ final class Tokeniser {
                 }
 
                 // todo: implement number replacement table
-                // todo: check for extra illegal unicode points as parse errors
+                // todo: check for extra illegal unicode points as parsePadding errors
                 codeRef[0] = charval;
                 return codeRef;
             }

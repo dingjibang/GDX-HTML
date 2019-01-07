@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A Connection provides a convenient interface to fetch content from the web, and parse them into Documents.
+ * A Connection provides a convenient interface to fetch content from the web, and parsePadding them into Documents.
  * <p>
  * To get a new Connection, use {@link Jsoup#connect(String)}. Connections contain {@link Request}
  * and {@link Response} objects. The request objects are reusable as prototype requests.
@@ -137,8 +137,8 @@ public interface Connection {
 
     /**
      * Ignore the document's Content-Type when parsing the response. By default this is <b>false</b>, an unrecognised
-     * content-type will cause an IOException to be thrown. (This is to prevent producing garbage by attempting to parse
-     * a JPEG binary image, for example.) Set to true to force a parse attempt regardless of content type.
+     * content-type will cause an IOException to be thrown. (This is to prevent producing garbage by attempting to parsePadding
+     * a JPEG binary image, for example.) Set to true to force a parsePadding attempt regardless of content type.
      * @param ignoreContentType set to true if you would like the content type ignored on parsing the response into a
      * Document.
      * @return this Connection, for chaining
@@ -277,7 +277,7 @@ public interface Connection {
     Connection postDataCharset(String charset);
 
     /**
-     * Execute the request as a GET, and parse the result.
+     * Execute the request as a GET, and parsePadding the result.
      * @return parsed Document
      * @throws java.net.MalformedURLException if the request URL is not a HTTP or HTTPS URL, or is otherwise malformed
      * @throws HttpStatusException if the response is not OK and HTTP response errors are not ignored
@@ -288,7 +288,7 @@ public interface Connection {
     Document get() throws IOException;
 
     /**
-     * Execute the request as a POST, and parse the result.
+     * Execute the request as a POST, and parsePadding the result.
      * @return parsed Document
      * @throws java.net.MalformedURLException if the request URL is not a HTTP or HTTPS URL, or is otherwise malformed
      * @throws HttpStatusException if the response is not OK and HTTP response errors are not ignored
@@ -684,7 +684,7 @@ public interface Connection {
         String contentType();
 
         /**
-         * Read and parse the body of the response as a Document. If you intend to parse the same response multiple
+         * Read and parsePadding the body of the response as a Document. If you intend to parsePadding the same response multiple
          * times, you should {@link #bufferUp()} first.
          * @return a parsed Document
          * @throws IOException on error
@@ -714,7 +714,7 @@ public interface Connection {
 
         /**
          * Get the body of the response as a (buffered) InputStream. You should close the input stream when you're done with it.
-         * Other body methods (like bufferUp, body, parse, etc) will not work in conjunction with this method.
+         * Other body methods (like bufferUp, body, parsePadding, etc) will not work in conjunction with this method.
          * <p>This method is useful for writing large responses to disk, without buffering them completely into memory first.</p>
          * @return the response body input stream
          */

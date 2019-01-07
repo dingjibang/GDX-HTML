@@ -21,7 +21,7 @@ enum HtmlTreeBuilderState {
             } else if (t.isComment()) {
                 tb.insert(t.asComment());
             } else if (t.isDoctype()) {
-                // todo: parse error check on expected doctypes
+                // todo: parsePadding error check on expected doctypes
                 // todo: quirk state check on doctype ids
                 Token.Doctype d = t.asDoctype();
                 DocumentType doctype = new DocumentType(
@@ -1498,7 +1498,7 @@ enum HtmlTreeBuilderState {
     }
 
     // lists of tags to search through. A little harder to read here, but causes less GC than dynamic varargs.
-    // was contributing around 10% of parse GC load.
+    // was contributing around 10% of parsePadding GC load.
     // must make sure these are sorted, as used in findSorted. MUST update HtmlTreebuilderStateTest if more arrays added.
     static final class Constants {
         static final String[] InBodyStartToHead = new String[]{"base", "basefont", "bgsound", "command", "link", "meta", "noframes", "script", "style", "title"};

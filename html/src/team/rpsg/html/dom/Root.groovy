@@ -22,6 +22,8 @@ class Root extends Dom{
 		width = stage.width
 		height = stage.height
 
+		build()
+
 		x = 0
 		y = 0
 

@@ -50,7 +50,7 @@ public final class ConstrainableInputStream extends BufferedInputStream {
         if (interrupted || capped && remaining <= 0)
             return -1;
         if (Thread.interrupted()) {
-            // interrupted latches, because parse() may call twice (and we still want the thread interupt to clear)
+            // interrupted latches, because parsePadding() may call twice (and we still want the thread interupt to clear)
             interrupted = true;
             return -1;
         }
