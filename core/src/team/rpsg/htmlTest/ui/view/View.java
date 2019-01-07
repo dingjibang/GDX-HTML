@@ -187,8 +187,10 @@ public abstract class View implements InputProcessor{
 	}
 
 	public void resize() {
-		if(stage != null)
+		if(stage != null){
 			stage.getViewport().update(Game.width(), Game.height(), true);
+			stage.getViewport().setWorldSize(Game.width(), Game.height());
+		}
 	}
 	
 }

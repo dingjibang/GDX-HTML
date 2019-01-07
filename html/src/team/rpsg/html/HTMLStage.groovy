@@ -1,9 +1,12 @@
 package team.rpsg.html
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable
+import com.badlogic.gdx.utils.Scaling
+import com.badlogic.gdx.utils.viewport.ScalingViewport
 import com.steadystate.css.dom.CSSRuleListImpl
 import com.steadystate.css.dom.CSSStyleDeclarationImpl
 import com.steadystate.css.dom.CSSStyleRuleImpl
@@ -39,6 +42,8 @@ class HTMLStage extends Stage{
 	List<String> styles = []
 
 	private HTMLStage(Document document) {
+		super(new ScalingViewport(Scaling.none, Gdx.graphics.width, Gdx.graphics.height, new OrthographicCamera()))
+
 		this.res = new ResourceManager()
 		this.document = document
 
@@ -66,13 +71,18 @@ class HTMLStage extends Stage{
 
 		joinStyles()
 
-		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
-
 		refresh()
 	}
 
-	void refresh(){
-		addActor(rootDom = new Root(document.body(), this))
+	void refresh(boolean isHardRefresh = false){
+		if(isHardRefresh){
+			forceBuild()
+		}else{
+			clear()
+			addActor(rootDom = new Root(document.body(), this))
+		}
+
+		debugAll = document.getElementsByTag("html").attr("debug").equalsIgnoreCase("true")
 	}
 
 
@@ -148,5 +158,12 @@ class HTMLStage extends Stage{
 		rootDom = null
 		res.dispose()
 		super.dispose()
+	}
+
+	void resize(int width, int height){
+		viewport.setWorldSize(width, height)
+		viewport.update(width, height, true)
+
+		refresh(false)
 	}
 }

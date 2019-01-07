@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Timer
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Document
 import team.rpsg.html.HTMLStage
+import team.rpsg.htmlTest.core.Game
 import team.rpsg.htmlTest.ui.view.View
 
 @CompileStatic
@@ -34,15 +35,12 @@ class GameView extends View{
         if(keycode == Input.Keys.R)
             init()
 
-        if(keycode == Input.Keys.L)
-            team.rpsg.htmlTest.util.Timer.add(team.rpsg.htmlTest.util.Timer.TimeType.frame, 20, team.rpsg.htmlTest.util.Timer.FOREVER, this.&init)
-
         super.keyDown(keycode)
     }
 
     void resize() {
-//        if(this.stage != null)
-//            init()
-//        super.resize()
+        if(this.stage != null){
+            (this.stage as HTMLStage).resize(Game.width(), Game.height())
+        }
     }
 }
