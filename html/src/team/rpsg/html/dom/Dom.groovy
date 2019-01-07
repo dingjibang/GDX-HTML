@@ -2,6 +2,7 @@ package team.rpsg.html.dom
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Container
@@ -52,6 +53,8 @@ class Dom extends VerticalGroup {
 	int textAlign = Align.left
 	int boxAlign = Align.left
 	int verticalAlign = Align.bottom
+
+	private boolean needsCalcWidth = false
 
 	static Dom temp = null
 
@@ -132,6 +135,8 @@ class Dom extends VerticalGroup {
 		switch (display.toLowerCase()){
 			case "block":
 				needsRow = true; break
+			case "table":
+				needsRow = true; break
 			case "none":
 				visible = false; break
 		}
@@ -165,9 +170,17 @@ class Dom extends VerticalGroup {
 		if(widthValue != null){
 			width = (widthValue.get(parentDom) - marginLeftRight) as float
 		}else if(widthValue == null){
-			width = parentDom.innerWidth
+//			width = parentDom.innerWidth
+			needsCalcWidth = true
 		}
 
+	}
+
+	@Override
+	void layout() {
+		super.layout()
+		if(needsCalcWidth)
+			width = prefWidth
 	}
 
 	float getWidth() {
@@ -224,10 +237,14 @@ class Dom extends VerticalGroup {
 
 			child.parse()
 
-
+			def that = this
 
 			if(child.widthValue)
-				container.width(Value.percentWidth(1))
+				container.width(new Value() {
+					float get(Actor context) {
+						return child.widthValue.get(that)
+					}
+				})
 
 			if(child.needsRow){
 				row()
