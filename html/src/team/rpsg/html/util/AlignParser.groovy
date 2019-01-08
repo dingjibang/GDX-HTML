@@ -20,9 +20,28 @@ class AlignParser {
 		return defaultAlign
 	}
 
+	static int verticalAlign(Object align, int defaultAlign = Align.bottom){
+
+		if(!align || align.toString().length() == 0)
+			return defaultAlign
+
+		def s = align.toString()
+
+		switch (s.toLowerCase()){
+			case "top": return Align.top
+			case "middle": return Align.center
+			case "center": return Align.center
+			case "bottom": return Align.bottom
+		}
+
+		return defaultAlign
+	}
+
 	static int join(int lr, int tb){
 		if(lr == Align.center)
 			return tb
+		if(tb == Align.center)
+			return Align.center
 
 		return tb | lr
 	}

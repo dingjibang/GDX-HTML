@@ -6,6 +6,7 @@ import com.steadystate.css.parser.CSSOMParser
 import com.steadystate.css.parser.SACParserCSS3
 import groovy.transform.CompileStatic
 import org.w3c.css.sac.InputSource
+import team.rpsg.html.util.StyleParser
 
 @CompileStatic
 enum HTMLDomPreset {
@@ -48,7 +49,6 @@ enum HTMLDomPreset {
 	HTML("display: block;"),
 	I("font-style: italic;"),
 	IFRAME("display: block;"),
-	IMG("display: inline-block;"),
 	INS("text-decoration: underline;"),
 	KBD("font-family: monospace;"),
 	LABEL("cursor: default;"),
@@ -97,8 +97,7 @@ enum HTMLDomPreset {
 			return
 		}
 
-		CSSStyleDeclarationImpl dec = (CSSStyleDeclarationImpl)new CSSOMParser(new SACParserCSS3()).parseStyleDeclaration(new InputSource(new StringReader(stylesString)))
-		styles = dec.properties
+		styles = StyleParser.parse(stylesString).properties
 	}
 
 	HTMLDom dom(org.jsoup.nodes.Node node){

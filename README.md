@@ -19,6 +19,7 @@ using HTML + CSS + JS to build libGDX UI!
 # support CSS
 
 - **width**
+- **height**
 - **font-size**
 - **color**
 - **background-color**
