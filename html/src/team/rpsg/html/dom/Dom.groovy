@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.Value
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.Layout
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import groovy.transform.CompileStatic
@@ -18,6 +19,7 @@ import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
 import team.rpsg.html.manager.ResourceManager
+import team.rpsg.html.manager.widget.AutoWidthContainer
 import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.BoxParser
 import team.rpsg.html.util.ColorParser
@@ -209,7 +211,7 @@ class Dom extends VerticalGroup {
 
 		node.allStyles.each {it.findAll({it.name == name}).each({result = it.value})}
 
-		if(result && result.toString().equals("inherit")){
+		if(result && result.toString() == "inherit"){
 			inherit = true
 			result = null
 		}
@@ -232,17 +234,16 @@ class Dom extends VerticalGroup {
 			child.parent = child.parentDom = this
 			child.stage = stage
 
-			def container = new Container(child)
+			def container = new AutoWidthContainer(child)
 			child.parentContainer = container
 
 			child.parse()
 
 			def that = this
 
-			if(child.widthValue)
 				container.width(new Value() {
 					float get(Actor context) {
-						return child.widthValue.get(that)
+						return Math.max((context as Dom).prefWidth, context.width)
 					}
 				})
 
