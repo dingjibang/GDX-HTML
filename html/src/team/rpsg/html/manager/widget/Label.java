@@ -11,6 +11,9 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 	public static final Float AUTO_LINE_HEIGHT = null;
 	private Float lineHeight = AUTO_LINE_HEIGHT;
 
+	public static final Float AUTO_LETTER_SPACING = null;
+	private Float letterSpacing = AUTO_LETTER_SPACING;
+
 	private float lastHeight = 0;
 
 	public Label(CharSequence text, Skin skin) {
@@ -40,6 +43,16 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 	public void setLineHeight(Float lineHeight) {
 		this.lineHeight = lineHeight;
 	}
+
+	public Float getLetterSpacing() {
+		return letterSpacing;
+	}
+
+	public void setLetterSpacing(Float letterSpacing) {
+		this.letterSpacing = letterSpacing;
+	}
+
+
 
 	private void beginSetLineHeight(){
 		if(lineHeight != null){
