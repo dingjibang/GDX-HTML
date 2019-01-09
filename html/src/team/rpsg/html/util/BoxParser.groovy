@@ -52,7 +52,7 @@ class BoxParser {
 	public static final int NEEDS_SET_ALIGN = 1
 
 	static int parseMargin(Dom dom){
-		if(dom.display != "block" && dom.display != "inline-block" && !dom.parentContainer)
+		if(!dom.parentContainer)
 			return -1
 
 		float mLeft = 0, mRight = 0, mTop = 0, mBottom = 0

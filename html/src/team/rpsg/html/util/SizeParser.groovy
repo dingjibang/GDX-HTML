@@ -38,7 +38,7 @@ class SizeParser {
 	 * width: 65px;
 	 * width: auto;
 	 */
-	static Value parse(Object property, parseAutoValue = false){
+	static Value parse(Object property, parseAutoValue = false, Closure valueParser = this.&percentInnerWidth){
 
 		if(parseAutoValue && property && property.toString().equalsIgnoreCase("auto"))
 			return new AutoValue()
@@ -56,12 +56,12 @@ class SizeParser {
 				return new Value.Fixed(0)
 
 			if(unit.lexicalUnitType == 23)
-				return percentInnerWidth((unit.floatValue / 100f) as float)
+				return valueParser((unit.floatValue / 100f) as float) as Value
 		}
 
 		if(property instanceof String){
 			if(property.indexOf('%') > 0)
-				return percentInnerWidth((property.toString().replace("%", "").toFloat() / 100f) as float)
+				return valueParser((property.toString().replace("%", "").toFloat() / 100f) as float) as Value
 			if(property.indexOf("px") > 0)
 				return new Value.Fixed(property.toString().replace("px", "").toInteger())
 		}
@@ -75,6 +75,15 @@ class SizeParser {
 		return new Value() {
 			float get (Actor actor) {
 				(actor as Dom).innerWidth * percent
+			}
+		}
+	}
+
+	@CompileStatic
+	static Value percentInnerHeight(float percent){
+		return new Value() {
+			float get (Actor actor) {
+				(actor as Dom).innerHeight * percent
 			}
 		}
 	}

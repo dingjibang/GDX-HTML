@@ -30,7 +30,7 @@ public class AsyncLoadImage extends Image {
 		this.resourceManager = resourceManager;
 	}
 	
-	private AsyncLoadImage(String texturePath, CustomRunnable<AsyncLoadImage> onLoaded, ResourceManager resourceManager) {
+	public AsyncLoadImage(String texturePath, CustomRunnable<AsyncLoadImage> onLoaded, ResourceManager resourceManager) {
 		this(texturePath, resourceManager);
 		this._onLoaded = onLoaded;
 	}
@@ -49,6 +49,7 @@ public class AsyncLoadImage extends Image {
 			setHeight(getDrawable().getMinHeight());
 		if (originAlignment != -1)
 			setOrigin(originAlignment);
+
 	}
 	
 	/**当该纹理被调用绘制时，才开始懒加载纹理，否则歇着*/

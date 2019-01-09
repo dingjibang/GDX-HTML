@@ -21,11 +21,14 @@ body{
 
 .left{
     text-align: left;
+    margin-right: 150px;
 }
 
 .right{
     text-align: right;
-    padding-bottom: 50px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 120px;
 }
 
 .title{
@@ -36,15 +39,26 @@ body{
 
 .mtitle{
     font-size: 46px;
+    line-height: 0;
+    font-weight: normal;
 }
 
 .desc{
     padding-top: 50px;
-    color: white;
+    color: #333;
+    display: inline-block;
+}
+.desc>span{
+    word-break: break-all;
+    display: block;
+    padding-top: 10px;
 }
 
 .right div{
     font-size: 26px;
     padding: 8px 10px;
-    background-color: azure;
+}
+
+span.slo{
+    color: #55C0AC;
 }
