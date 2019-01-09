@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Align
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
+import team.rpsg.html.manager.widget.Label
 import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.ColorParser
 import team.rpsg.html.util.SizeParser
@@ -29,6 +30,10 @@ class Text extends Dom {
 	int fontSize = 30
 	def text = ""
 	Color textColor = Color.WHITE
+	Float lineHeight = Label.AUTO_LINE_HEIGHT
+
+	private String wrap
+	private boolean markup
 
 
 	Text(Node node) {
@@ -41,20 +46,24 @@ class Text extends Dom {
 		text = (node as TextNode).text()
 		textColor = style("color", "white", ColorParser.&parse) as Color
 		fontSize = style("font-size", "16px", SizeParser.&parseFontPX) as int
+
+		wrap = style("-gdx-wrap", "false", {p -> p?.toString()})
+		markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})
+
+		lineHeight = style("line-height", null, {v -> v ? SizeParser.parse(v).get(parentDom).toFloat() : Label.AUTO_LINE_HEIGHT}) as Float
 	}
 
 	void build() {
 		super.build()
 		def label = res.text.getLabel(text, fontSize)
 		label.color = textColor ?: Color.WHITE
+		label.lineHeight = lineHeight
 
-		def wrapProperty = style("-gdx-wrap", "false", {p -> p?.toString()})
-		def markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})
 
 		if(markup)
 			label.style.font.data.markupEnabled = markup
 
-		if(wrapProperty && wrapProperty == "true"){
+		if(wrap && wrap == "true"){
 			label.wrap = true
 
 			def container = new Container(label).align(textAlign)

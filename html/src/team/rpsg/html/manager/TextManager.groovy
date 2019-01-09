@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.Pools
 import groovy.transform.CompileStatic
+import team.rpsg.html.manager.widget.Label
 import team.rpsg.lazyFont.LazyBitmapFont
 
 @CompileStatic
@@ -45,7 +45,7 @@ class TextManager {
 	}
 
 	Label getLabel(Object text, int fontSize, FreeTypeFontGenerator gen) {
-		Label.LabelStyle ls = new Label.LabelStyle()
+		com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle ls = new com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle()
 		ls.font = gen == null ? get(fontSize) : get(fontSize, gen)
 
 		return new Label(text.toString(), ls)

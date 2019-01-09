@@ -17,6 +17,7 @@ enum HTMLDomPreset {
 	BDO("unicode-bidi: bidi-override;"),
 	BLOCKQUOTE("display: block;margin-top: 1em;margin-bottom: 1em;margin-left: 40px;margin-right: 40px;"),
 	BODY("display: block;margin: 8px;"),
+	BR("display: block;"),
 	CAPTION("display: table-caption;text-align: center;"),
 	CITE("font-style: italic;"),
 	CODE("font-family: monospace;"),
