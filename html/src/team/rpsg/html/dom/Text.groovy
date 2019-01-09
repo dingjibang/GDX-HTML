@@ -51,8 +51,8 @@ class Text extends Dom {
 		wrap = style("-gdx-wrap", "false", {p -> p?.toString()})
 		markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})
 
-		lineHeight = style("line-height", null, {v -> v ? SizeParser.parse(v).get(parentDom).toFloat() : Label.AUTO_LINE_HEIGHT}) as Float
-		letterSpacing = style("letter-spacing", null, {v -> v ? SizeParser.parse(v).get(parentDom).toFloat() : Label.AUTO_LETTER_SPACING}) as Float
+		lineHeight = style("line-height", null, {v -> v ? SizeParser.parse(v)?.get(parentDom)?.toFloat() : Label.AUTO_LINE_HEIGHT}) as Float
+		letterSpacing = style("letter-spacing", null, {v -> v ? SizeParser.parse(v)?.get(parentDom)?.toFloat() : Label.AUTO_LETTER_SPACING}) as Float
 	}
 
 	void build() {

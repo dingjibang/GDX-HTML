@@ -40,8 +40,11 @@ class SizeParser {
 	 */
 	static Value parse(Object property, parseAutoValue = false, Closure valueParser = this.&percentInnerWidth){
 
-		if(parseAutoValue && property && property.toString().equalsIgnoreCase("auto"))
-			return new AutoValue()
+		if(property && property.toString().equalsIgnoreCase("auto")){
+			if(parseAutoValue)
+				return new AutoValue()
+			return null
+		}
 
 		if(property instanceof Float)
 			return new Value.Fixed(property.toFloat())

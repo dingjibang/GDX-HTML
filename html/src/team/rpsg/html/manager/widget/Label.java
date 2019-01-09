@@ -80,7 +80,7 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 		float result = super.getPrefHeight();
 		endSetLineHeight();
 
-		if(getWrappedLinesCount() == 0 && getText().toString().length() != 0)//fix a single line but gdx thinks it's a ZERO line bug
+		if(getWrappedLinesCount() == 0 && getText().toString().length() != 0 && lineHeight != AUTO_LINE_HEIGHT)//fix a single line but gdx thinks it's a ZERO line bug
 			return lineHeight;
 
 		return result;
