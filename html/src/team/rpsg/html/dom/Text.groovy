@@ -31,7 +31,7 @@ class Text extends Dom {
 	def text = ""
 	Color textColor = Color.WHITE
 	Float lineHeight = Label.AUTO_LINE_HEIGHT
-	Float letterSpacing = Label.AUTO_LETTER_SPACING
+	Integer letterSpacing = Label.AUTO_LETTER_SPACING
 
 	private String wrap
 	private boolean markup
@@ -52,7 +52,7 @@ class Text extends Dom {
 		markup = style("-gdx-markup", "false", {p -> p?.toString()?.toBoolean()})
 
 		lineHeight = style("line-height", null, {v -> v ? SizeParser.parse(v)?.get(parentDom)?.toFloat() : Label.AUTO_LINE_HEIGHT}) as Float
-		letterSpacing = style("letter-spacing", null, {v -> v ? SizeParser.parse(v)?.get(parentDom)?.toFloat() : Label.AUTO_LETTER_SPACING}) as Float
+		letterSpacing = style("letter-spacing", null, {v -> v ? SizeParser.parse(v)?.get(parentDom)?.toInteger() : Label.AUTO_LETTER_SPACING}) as Integer
 	}
 
 	void build() {

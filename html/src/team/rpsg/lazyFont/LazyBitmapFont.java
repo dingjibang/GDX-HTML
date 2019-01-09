@@ -150,6 +150,7 @@ public class LazyBitmapFont extends BitmapFont {
 			if (glyph == null && ch != 0){
 				glyph = generateGlyph(ch);
 			}
+
 			return glyph;
 		}
 
