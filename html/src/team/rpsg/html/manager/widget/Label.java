@@ -1,15 +1,8 @@
 package team.rpsg.html.manager.widget;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Align;
-import team.rpsg.gdxQuery.GdxQuery;
-import team.rpsg.html.manager.ResourceManager;
-import team.rpsg.html.manager.TextManager;
-import team.rpsg.lazyFont.LazyBitmapFont;
 
 /**
  */
@@ -17,6 +10,8 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 
 	public static final Float AUTO_LINE_HEIGHT = null;
 	private Float lineHeight = AUTO_LINE_HEIGHT;
+
+	private float lastHeight = 0;
 
 	public Label(CharSequence text, Skin skin) {
 		super(text, skin);
@@ -46,21 +41,43 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 		this.lineHeight = lineHeight;
 	}
 
-	public void layout() {
-		BitmapFont.BitmapFontData data = null;
-		float h = 0;
-
+	private void beginSetLineHeight(){
 		if(lineHeight != null){
-			data = getStyle().font.getData();
-			h = data.lineHeight;
+			BitmapFont.BitmapFontData data = getStyle().font.getData();
+			lastHeight = data.lineHeight;
 
 			data.setLineHeight(lineHeight);
 		}
+	}
 
+	private void endSetLineHeight(){
+		if(lineHeight != null){
+			getStyle().font.getData().setLineHeight(lastHeight);
+		}
+	}
+
+	public void layout() {
+		beginSetLineHeight();
 		super.layout();
+		endSetLineHeight();
+	}
 
-		if(lineHeight != null)
-			data.setLineHeight(h);
+	public float getPrefHeight() {
+		beginSetLineHeight();
+		float result = super.getPrefHeight();
+		endSetLineHeight();
 
+		if(getWrappedLinesCount() == 0 && getText().toString().length() != 0)//fix a single line but gdx thinks it's a ZERO line bug
+			return lineHeight;
+
+		return result;
+	}
+
+	/**
+	 * haha
+	 */
+	public float getWrappedLinesCount() {
+		BitmapFont.BitmapFontData data = getStyle().font.getData();
+		return (getGlyphLayout().height - data.capHeight) / data.lineHeight;
 	}
 }

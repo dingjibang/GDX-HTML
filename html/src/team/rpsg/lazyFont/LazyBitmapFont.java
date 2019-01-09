@@ -173,6 +173,7 @@ public class LazyBitmapFont extends BitmapFont {
 
 			gab.bitmap = null;
 
+			//TODO 这句话可能有问题？
 			font.getRegions().add(rg);
 
 

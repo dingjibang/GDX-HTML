@@ -27,5 +27,6 @@ using HTML + CSS + JS to build libGDX UI!
 - **margin** (margin-left(auto)/..right(auto)/..top/..bottom)
 - **text-align**
 - **display** (inline/inline-block/block/table)
+- **line-height** 
 - ***-gdx-wrap*** (text wrap (unstable)) 
 - ***-gdx-markup*** (text markup color language support)
