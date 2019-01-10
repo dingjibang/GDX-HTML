@@ -3,6 +3,7 @@ package team.rpsg.html.manager.widget;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Layout;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,14 +22,31 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 
 	private float lastHeight = 0;
 
-	private Set<GlyphAndSize> glyphList = new HashSet<>();
+	private List<GlyphAndSize> glyphList = new ArrayList<>();
 
 	private boolean textChanged = true;
+
+	private boolean wrap = false;
+
+	private boolean isInvalidateHierarchy = true;
+
+	private boolean prefSizeInvalid = true;
+
+	private boolean disabledHeightHook = false;
+
+	public void setWrap(boolean wrap) {
+		this.wrap = wrap;
+		super.setWrap(wrap);
+	}
+
+	public void invalidate () {
+		super.invalidate();
+		prefSizeInvalid = true;
+	}
 
 	@Override
 	public void setText(CharSequence newText) {
 		super.setText(newText);
-		glyphList = new HashSet<>(getText().length() + 10);
 		textChanged = true;
 	}
 
@@ -69,7 +87,7 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 	}
 
 	private void beginSetXAdvance(){
-		if(glyphList == null)
+		if(glyphList == null || this.letterSpacing == AUTO_LETTER_SPACING)
 			return;
 
 		if(!textChanged){
@@ -88,12 +106,14 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 		for(char c : chars){
 			if(c == 0 || c == ' ')
 				continue;
-			glyphList.add(new GlyphAndSize(data.getGlyph(c)).to(letterSpacing));
+			GlyphAndSize glyphAndSize = new GlyphAndSize(data.getGlyph(c));
+			if(!glyphList.contains(glyphAndSize))
+				glyphList.add(glyphAndSize.to(letterSpacing));
 		}
 	}
 
 	private void endSetXAdvance(){
-		if(glyphList == null)
+		if(glyphList == null || this.letterSpacing == AUTO_LETTER_SPACING)
 			return;
 
 		for(GlyphAndSize glyphAndSize : glyphList)
@@ -118,33 +138,56 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 	public void layout() {
 		beginSetLineHeight();
 		beginSetXAdvance();
+		disabledHeightHook = true;
 		super.layout();
+		disabledHeightHook = false;
+		isInvalidateHierarchy = true;
 		endSetXAdvance();
 		endSetLineHeight();
 	}
 
 	public float getPrefHeight() {
+		if(disabledHeightHook)
+			return super.getPrefHeight();
+		if(!prefSizeInvalid)
+			return super.getPrefHeight();
+
+		prefSizeInvalid = false;
+
 		beginSetLineHeight();
 		beginSetXAdvance();
 		float result = super.getPrefHeight();
-		endSetLineHeight();
 		endSetXAdvance();
+		endSetLineHeight();
 
-		if(getLines() == 0 && getText().toString().length() != 0 && lineHeight != AUTO_LINE_HEIGHT)//fix a single line but gdx thinks it's a ZERO line bug
+		//fix a single line but gdx thinks it's a ZERO line bug
+		if(getLines() == 0 && getText().toString().length() != 0 && lineHeight != AUTO_LINE_HEIGHT){
+			if(!wrap && isInvalidateHierarchy){
+				((Layout)getParent()).invalidateHierarchy();
+				isInvalidateHierarchy = false;
+			}
 			return lineHeight;
+		}
 
 		return result;
 	}
 
 	public float getPrefWidth() {
+		if(!prefSizeInvalid)
+			return super.getPrefWidth();
+
+		prefSizeInvalid = false;
+
 		beginSetLineHeight();
 		beginSetXAdvance();
 		float result = super.getPrefWidth();
-		endSetLineHeight();
 		endSetXAdvance();
+		endSetLineHeight();
 
-		if(getLines() == 0 && getText().toString().length() != 0 && lineHeight != AUTO_LINE_HEIGHT)//fix a single line but gdx thinks it's a ZERO line bug
-			return lineHeight;
+		if(!wrap && isInvalidateHierarchy){
+			((Layout)getParent()).invalidateHierarchy();
+			isInvalidateHierarchy = false;
+		}
 
 		return result;
 	}
@@ -174,6 +217,18 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 		GlyphAndSize reset(){
 			glyph.xadvance = originXAdvance;
 			return this;
+		}
+
+		@Override
+		public int hashCode() {
+			return glyph.id;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof GlyphAndSize)
+				return glyph.id == ((GlyphAndSize) obj).glyph.id;
+			return super.equals(obj);
 		}
 	}
 }
