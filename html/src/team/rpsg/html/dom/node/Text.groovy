@@ -1,4 +1,4 @@
-package team.rpsg.html.dom
+package team.rpsg.html.dom.node
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.ui.Container
@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Align
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
+import team.rpsg.html.dom.Dom
 import team.rpsg.html.manager.widget.Label
 import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.ColorParser

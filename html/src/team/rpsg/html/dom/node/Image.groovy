@@ -1,4 +1,4 @@
-package team.rpsg.html.dom
+package team.rpsg.html.dom.node
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Container
@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Scaling
 import groovy.transform.CompileStatic
 import org.jsoup.nodes.Node
 import team.rpsg.html.HTMLStage
+import team.rpsg.html.dom.HTMLDom
 import team.rpsg.html.manager.widget.AsyncLoadImage
 import team.rpsg.html.util.PathParser
 import team.rpsg.html.util.StyleParser

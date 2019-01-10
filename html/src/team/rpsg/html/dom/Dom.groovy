@@ -17,11 +17,14 @@ import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
 import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
+import team.rpsg.html.dom.node.Image
+import team.rpsg.html.dom.node.Text
 import team.rpsg.html.manager.ResourceManager
 import team.rpsg.html.manager.widget.AutoSizeContainer
 import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.BoxParser
 import team.rpsg.html.util.ColorParser
+import team.rpsg.html.util.DomParser
 import team.rpsg.html.util.SizeParser
 
 /**
@@ -55,10 +58,11 @@ class Dom extends VerticalGroup {
 	int boxAlign = Align.left
 	Integer verticalAlign = null
 
+	TableLayout tableLayout
+
 	private boolean needsCalcWidth = false, needsCalcHeight = false
 	private boolean isParseDisplay = false
 
-	static Dom temp = null
 
 	Dom(){
 
@@ -111,31 +115,6 @@ class Dom extends VerticalGroup {
 		(stage as HTMLStage).res
 	}
 
-	static Dom parse(Node node){
-		switch (node.class){
-
-			case TextNode.class:
-				return new Text(node)
-
-
-			case Element.class:
-				def ele = node as Element
-
-				if(ele.tagName().equalsIgnoreCase("img"))
-					return new Image(ele)
-
-				try{
-					return HTMLDomPreset.valueOf(ele.tagName().toUpperCase()).dom(node)
-				}catch (ignored){
-					return new UnknownDom(node)
-				}
-
-
-			default:
-				return new UnknownDom(node)
-
-		}
-	}
 
 	void row(){
 		addActor(current = new HorizontalGroup())
@@ -149,9 +128,16 @@ class Dom extends VerticalGroup {
 
 		switch (display.toLowerCase()){
 			case "block":
-				needsRow = true; break
+				needsRow = true;
+				break
 			case "table":
-				needsRow = true; break
+			case "table-row":
+				tableLayout = new TableLayout(this)
+				needsRow = true
+				break
+			case "table-cell":
+				tableLayout = new TableLayout(this)
+				break
 			case "none":
 				visible = false; break
 		}
@@ -264,13 +250,18 @@ class Dom extends VerticalGroup {
 
 	def buildChild(){
 		node.childNodes().each {
-			Dom child = parse(it)
+			Dom child = DomParser.parse(it)
+
 			child.parent = child.parentDom = this
 			child.stage = stage
 
 			child.parseDisplay()
 
-			if(child.needsRow || child.display == "inline-block"){
+			if(child.display in TableLayout.TAG_NAME){
+				if(this.tableLayout)
+					tableLayout.parent = this.tableLayout
+
+			} else if(child.needsRow || child.display == "inline-block"){
 				def container = new AutoSizeContainer(child)
 				child.parentContainer = container
 				child.stage = stage

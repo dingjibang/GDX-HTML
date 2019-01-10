@@ -84,12 +84,22 @@ Using HTML + CSS + JS to build libGDX UI!
 ## Table layout
 - :blue_heart: **&lt;table /&gt;** with **display: table**
 - :blue_heart: **&lt;tr /&gt;** with **display: table-row**
-- :blue_heart: **&lt;td /&gt;** with **display: table-cell**
+- :blue_heart: **&lt;td /&gt; &lt;th /&gt;** with **display: table-cell**
 - :blue_heart: **vertical-align**
 
 ## Font
 - :blue_heart: **font-family**
 
+## Border
+- :blue_heart: **border**
+
+## Selectors / Pseudo selectors
+- :blue_heart: **:hover**
+- :blue_heart: **:active**
+- :green_heart: **:lt / :gt / :eq / :first-child / :last-child**
+- :green_heart: **:has(selector) / :not(selector)**
+- :green_heart: **:contains(text)**
+- :green_heart: **[See link](https://jsoup.org/apidocs/org/jsoup/select/Selector.html) to visit all support selectors / pseudo selectors**
 
 ## Event listener
 - :blue_heart: Coming soon.
