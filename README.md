@@ -43,11 +43,11 @@ Using HTML + CSS + JS to build libGDX UI!
 - :green_heart: **text-align** (left / center / right)
 - :heart: **line-height** (px)
    - ###### Setting the line-height property will cause the text dom to be layout multiple times.
-   - ###### The scene2d.Label of libgdx does not support line-height. For compatibility, it will generate additional performance
+   - ###### The scene2d.Label of libgdx does not support line-height. For compatibility, it will cost additional performance
    - ###### So if there is only a single line of text, it is recommended to set padding / height.  
 - :heart: **letter-spacing** (px)
 	- ###### Setting the letter-spacing property will cause the text dom to be layout multiple times.
-	- ###### The scene2d.Label of libgdx does not support letter-spacing. For compatibility, it will generate additional performance
+	- ###### The scene2d.Label of libgdx does not support letter-spacing. For compatibility, it will cost additional performance
 - :green_heart: **-gdx-markup** (true)
 	- ###### LibGDX text markup color language support.
     - ###### Once set, it will not be canceled, even if you set it to "false".
