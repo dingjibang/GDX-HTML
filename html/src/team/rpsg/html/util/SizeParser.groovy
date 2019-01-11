@@ -91,6 +91,9 @@ class SizeParser {
 		}
 	}
 
+	static final Value innerWidth = percentInnerWidth(1)
+	static final Value innerHeight = percentInnerHeight(1)
+
 	static class AutoValue extends Value{
 		float get(Actor context) {
 			return 0

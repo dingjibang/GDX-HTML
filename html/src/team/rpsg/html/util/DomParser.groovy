@@ -20,8 +20,9 @@ class DomParser {
 		switch (node.class){
 
 			case TextNode.class:
+				if((node as TextNode).text().trim().length() == 0)
+					return null
 				return new Text(node)
-
 
 			case Element.class:
 				def ele = node as Element

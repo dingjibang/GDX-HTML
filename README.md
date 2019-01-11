@@ -93,6 +93,9 @@ Using HTML + CSS + JS to build libGDX UI!
 ## Border
 - :blue_heart: **border**
 
+## Float
+- :broken_heart: **Nope, float is SHIT.**
+
 ## Selectors / Pseudo selectors
 - :blue_heart: **:hover**
 - :blue_heart: **:active**

@@ -38,15 +38,17 @@ class AlignParser {
 	}
 
 	static int join(int lr, int tb){
+		if(lr == Align.center && tb == Align.center)
+			return Align.center
 		if(lr == Align.center)
 			return tb
 		if(tb == Align.center)
-			return Align.center
+			return lr
 
 		return tb | lr
 	}
 
-	static String toString(int align){
+	static String toString(Integer align){
 		switch (align){
 			case Align.center : return "center"
 			case Align.left : return "left"

@@ -70,8 +70,6 @@ class HTMLStage extends Stage{
 
 
 		joinStyles()
-
-		refresh()
 	}
 
 	void refresh(boolean isHardRefresh = false){

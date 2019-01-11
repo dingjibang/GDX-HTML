@@ -22,7 +22,7 @@ import java.util.List;
 
 /**
  * GDX-LAZY-FONT for LibGDX 1.5.0+<br/>
- * <b>Auto generate & manage your bitmapfont without pre-generate.</b>
+ * <b>Auto apply & manage your bitmapfont without pre-apply.</b>
  *
  * @author dingjibang
  * @version 2.1.5

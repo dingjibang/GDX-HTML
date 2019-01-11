@@ -196,7 +196,7 @@ public class HtmlTreeBuilder extends TreeBuilder {
 
     Element insert(Token.StartTag startTag) {
         // handle empty unknown tags
-        // when the spec expects an empty tag, will directly hit insertEmpty, so won't generate this fake end tag.
+        // when the spec expects an empty tag, will directly hit insertEmpty, so won't apply this fake end tag.
         if (startTag.isSelfClosing()) {
             Element el = insertEmpty(startTag);
             stack.add(el);
@@ -558,11 +558,11 @@ public class HtmlTreeBuilder extends TreeBuilder {
 
     /**
      11.2.5.2 Closing elements that have implied end tags<p/>
-     When the steps below require the UA to generate implied end tags, then, while the current node is a dd element, a
+     When the steps below require the UA to apply implied end tags, then, while the current node is a dd element, a
      dt element, an li element, an option element, an optgroup element, a p element, an rp element, or an rt element,
      the UA must pop the current node off the stack of open elements.
 
-     @param excludeTag If a step requires the UA to generate implied end tags but lists an element to exclude from the
+     @param excludeTag If a step requires the UA to apply implied end tags but lists an element to exclude from the
      process, then the UA must perform the above steps as if that element was not in the above list.
      */
     void generateImpliedEndTags(String excludeTag) {

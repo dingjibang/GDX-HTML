@@ -13,11 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable
 import com.badlogic.gdx.utils.Align
 import groovy.transform.CompileStatic
-import org.jsoup.nodes.Element
 import org.jsoup.nodes.Node
-import org.jsoup.nodes.TextNode
 import team.rpsg.html.HTMLStage
-import team.rpsg.html.dom.node.Image
 import team.rpsg.html.dom.node.Text
 import team.rpsg.html.manager.ResourceManager
 import team.rpsg.html.manager.widget.AutoSizeContainer
@@ -63,6 +60,7 @@ class Dom extends VerticalGroup {
 	private boolean needsCalcWidth = false, needsCalcHeight = false
 	private boolean isParseDisplay = false
 
+	def debugStrings = []
 
 	Dom(){
 
@@ -89,7 +87,7 @@ class Dom extends VerticalGroup {
 		this.touchable = Touchable.enabled
 		this.addListener(new ClickListener(){
 			boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-
+				debugStrings.each this.&println
 				println("==============")
 				println(that.node)
 				println(that.x + ", " + that.y + ", " + that.width + ", " + that.height)
@@ -98,11 +96,16 @@ class Dom extends VerticalGroup {
 						"parent: ${AlignParser.toString(parentDom ? parentDom.align : -1)}, " +
 						"cparent: ${AlignParser.toString(parentDom ? parentDom.current.align : -1)}" +
 					"")
-				println("textAlign: ${AlignParser.toString(that.textAlign)}, " +
-						"mAlign: ${AlignParser.toString(that.boxAlign)}, " +
-						"vAlign: ${AlignParser.toString(that.verticalAlign)}" +
+				println("textAlign: ${AlignParser.toString(that?.textAlign)}, " +
+						"mAlign: ${AlignParser.toString(that?.boxAlign)}, " +
+						"vAlign: ${AlignParser.toString(that?.verticalAlign)}" +
 					"")
 
+				if(that.tableLayout.isTable)
+					println ("table: " + that.tableLayout.table.width + ", " + that.tableLayout.table.height)
+
+				if(that.tableLayout.isTD)
+					println ("cell: " + that.tableLayout.current.prefWidth + ", " + that.tableLayout.current.prefHeight)
 				if(that instanceof Text)
 					return true
 				event.cancel()
@@ -125,6 +128,7 @@ class Dom extends VerticalGroup {
 		isParseDisplay = true
 
 		display = style("display", "inline", {r -> r}, false)
+		tableLayout = new TableLayout()
 
 		switch (display.toLowerCase()){
 			case "block":
@@ -132,11 +136,10 @@ class Dom extends VerticalGroup {
 				break
 			case "table":
 			case "table-row":
-				tableLayout = new TableLayout(this)
-				needsRow = true
-				break
+			case "table-row-group":
+			case "table-header-group":
 			case "table-cell":
-				tableLayout = new TableLayout(this)
+				tableLayout.set(this)
 				break
 			case "none":
 				visible = false; break
@@ -160,9 +163,12 @@ class Dom extends VerticalGroup {
 
 
 		def widthParser = {v -> SizeParser.parse(v, false, SizeParser.&percentInnerWidth)}
-		widthValue = style("width", display == "block" ? "100%" : "auto", widthParser, false) as Value
-		if(!widthValue) widthValue = style("max-width", display == "block" ? "100%" : "auto", widthParser, false) as Value
-		if(!widthValue) widthValue = style("min-width", display == "block" ? "100%" : "auto", widthParser, false) as Value
+		def defaultWidth = display == "block" ? "100%" : "auto"
+		if(tableLayout.isTD)
+			defaultWidth = "100%"
+		widthValue = style("width", defaultWidth, widthParser, false) as Value
+		if(!widthValue) widthValue = style("max-width", defaultWidth, widthParser, false) as Value
+		if(!widthValue) widthValue = style("min-width", defaultWidth, widthParser, false) as Value
 
 
 		def heightParser = {v -> SizeParser.parse(v, false, SizeParser.&percentInnerHeight)}
@@ -252,14 +258,22 @@ class Dom extends VerticalGroup {
 		node.childNodes().each {
 			Dom child = DomParser.parse(it)
 
+			if(child == null)
+				return
+
 			child.parent = child.parentDom = this
 			child.stage = stage
 
 			child.parseDisplay()
 
-			if(child.display in TableLayout.TAG_NAME){
-				if(this.tableLayout)
-					tableLayout.parent = this.tableLayout
+			if(this.tableLayout)
+				child.tableLayout.parent = this.tableLayout
+
+			if(child.display in TableLayout.DISPLAY_NAME){
+
+				def actor = child.tableLayout.apply()
+				if(actor)
+					current.addActor(actor)
 
 			} else if(child.needsRow || child.display == "inline-block"){
 				def container = new AutoSizeContainer(child)
