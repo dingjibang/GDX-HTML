@@ -1,7 +1,9 @@
 package team.rpsg.html.util
 
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
+import com.badlogic.gdx.scenes.scene2d.utils.Layout
 import com.steadystate.css.dom.CSSValueImpl
 import com.steadystate.css.parser.LexicalUnitImpl
 import groovy.transform.CompileStatic
@@ -77,7 +79,10 @@ class SizeParser {
 	static Value percentInnerWidth(float percent){
 		return new Value() {
 			float get (Actor actor) {
-				(actor as Dom).innerWidth * percent
+				if(actor instanceof Dom)
+					return (actor as Dom).innerWidth * percent
+
+				return (actor as Table).width * percent
 			}
 		}
 	}
@@ -86,7 +91,10 @@ class SizeParser {
 	static Value percentInnerHeight(float percent){
 		return new Value() {
 			float get (Actor actor) {
-				(actor as Dom).innerHeight * percent
+				if(actor instanceof Dom)
+					return (actor as Dom).innerHeight * percent
+
+				return (actor as Table).height * percent
 			}
 		}
 	}

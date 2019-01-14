@@ -308,9 +308,6 @@ class Dom extends VerticalGroup {
 			}
 
 
-
-
-
 			child.build()
 			child.buildChild()
 		}

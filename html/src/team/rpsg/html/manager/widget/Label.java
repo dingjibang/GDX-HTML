@@ -147,19 +147,6 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 	}
 
 	public float getPrefHeight() {
-		if(disabledHeightHook)
-			return super.getPrefHeight();
-		if(!prefSizeInvalid)
-			return super.getPrefHeight();
-
-		prefSizeInvalid = false;
-
-		beginSetLineHeight();
-		beginSetXAdvance();
-		float result = super.getPrefHeight();
-		endSetXAdvance();
-		endSetLineHeight();
-
 		//fix a single line but gdx thinks it's a ZERO line bug
 		if(getLines() == 0 && getText().toString().length() != 0 && lineHeight != AUTO_LINE_HEIGHT){
 			if(!wrap && isInvalidateHierarchy){
@@ -168,6 +155,20 @@ public class Label extends com.badlogic.gdx.scenes.scene2d.ui.Label{
 			}
 			return lineHeight;
 		}
+
+		if(!prefSizeInvalid)
+			return super.getPrefHeight();
+
+		if(disabledHeightHook)
+			return super.getPrefHeight();
+
+
+		beginSetLineHeight();
+		beginSetXAdvance();
+		float result = super.getPrefHeight();
+		endSetXAdvance();
+		endSetLineHeight();
+
 
 		return result;
 	}

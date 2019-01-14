@@ -63,6 +63,7 @@ class Text extends Dom {
 		label.lineHeight = lineHeight
 		label.letterSpacing = letterSpacing
 
+		label.alignment = Align.left
 
 		if(markup)
 			label.style.font.data.markupEnabled = markup

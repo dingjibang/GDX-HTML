@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.GdxRuntimeException
 import org.jsoup.nodes.Element
 import team.rpsg.html.manager.widget.AutoSizeContainer
@@ -64,46 +65,73 @@ class TableLayout {
 		if(isTable){
 
 			def stage = dom.stage
-			def container = new Container(dom)
-			dom.parentContainer = container
 			dom.stage = stage
 
 			dom.parse()
 
-			container.width(new Value() {
-				float get(Actor context) {
-					return Math.max((context as Dom).prefWidth, context.width)
-				}
-			})
-
-			container.height(new Value() {
-				float get(Actor context) {
-					return Math.max((context as Dom).prefHeight, context.height)
-				}
-			})
-
 			table = new Table()
+			table.fillParent = true
 
 			dom.debugStrings.add { "table:${Math.random()}" + table.width + ", " + table.height }
 
-			dom.current.addActor(new Table().add(table).width(dom.width).height(dom.height).fill().table)
+			dom.current.addActor(new Container(table).width(dom.width).height(dom.height))
 
-			return container
+			return dom
 
 		} else if(isTR || isTBody || isTHead){
-			table.row().expand()
+			table.row()
 			return null
 		} else if(isTD){
 			dom.parse()
-			add(dom)
+			def c = add(dom)
+			dom.debugStrings.add { "cell: pw" + c.getPrefWidth() + ", ph" + c.getPrefHeight() }
+
+//			if(dom.heightValue){
+//				c.height(new Value() {
+//					float get(Actor context) {
+//						return dom.heightValue.get(parent.dom)
+//					}
+//				})
+//			}
+//			if(dom.widthValue){
+//				c.width(new Value() {
+//					float get(Actor context) {
+//						return dom.widthValue.get(parent.dom)
+//					}
+//				})
+//			}
 			return null
 		}
-
 
 		return dom
 	}
 
+	static def first = true
+
 	Cell<Dom> add(Dom dom){
-		current = table.add(dom).align(AlignParser.join(dom.textAlign, dom.verticalAlign)).expand()
+		current = table.add(dom).align(AlignParser.join(dom.textAlign, dom.verticalAlign))
+		current.expand()
+
+		if(dom.widthValue || dom.heightValue){
+			if(dom.widthValue){
+				current.growX()
+				current.width(new Value() {
+					float get(Actor context) {
+						return dom.widthValue.get(table)
+					}
+				})
+			}
+			if(dom.heightValue) {
+				current.growY()
+				current.height(new Value() {
+					float get(Actor context) {
+						return dom.heightValue.get(table)
+					}
+				})
+			}
+		}else{
+
+		}
+
 	}
 }
