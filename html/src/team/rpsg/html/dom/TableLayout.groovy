@@ -105,16 +105,30 @@ class TableLayout {
 
 	static def first = true
 
+	private void setCellWidth(){
+		current.width(new Value() {
+			float get(Actor context) {
+				println(Math.max((context as Dom).prefWidth, context.width))
+				Math.max((context as Dom).prefWidth, context.width)
+			}
+		})
+	}
+
+	private void setCellHeight(){
+		current.height(new Value() {
+			float get(Actor context) {
+				Math.max((context as Dom).prefHeight, context.height)
+			}
+		})
+	}
+
+
 	Cell<Dom> add(Dom dom){
 		current = table.add(dom).align(AlignParser.join(dom.textAlign, dom.verticalAlign))
 
 		if(dom.widthValue){
 			if(dom.widthValue instanceof Value.Fixed){
-				current.width(new Value() {
-					float get(Actor context) {
-						Math.max((context as Dom).prefWidth, context.width)
-					}
-				})
+				setCellWidth()
 			}
 
 			if(dom.widthValue instanceof SizeParser.percentInnerValue){
@@ -126,16 +140,12 @@ class TableLayout {
 				})
 			}
 		}else {
-//			current.width(Value.prefWidth)
+			setCellWidth()
 			current.expandX()
 		}
 		if(dom.heightValue){
 			if(dom.heightValue instanceof Value.Fixed){
-				current.height(new Value() {
-					float get(Actor context) {
-						Math.max((context as Dom).prefHeight, context.height)
-					}
-				})
+				setCellHeight()
 			}
 			if(dom.heightValue instanceof SizeParser.percentInnerValue){
 				def percent = (dom.heightValue as SizeParser.percentInnerValue).percent
@@ -146,7 +156,7 @@ class TableLayout {
 				})
 			}
 		}else{
-//			current.height(Value.prefHeight)
+			setCellHeight()
 			current.expandY()
 		}
 	}

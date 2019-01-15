@@ -6,27 +6,26 @@ body{
 }
 
 
+.center{
+    text-align: center;
+    padding-top: 150px;
+}
 .cd{
-    margin: 0 auto;
-    padding-top: 100px;
     display: table;
+    margin: 0 auto;
 }
 
 .left, .right{
-    margin: 0 auto;
-    display: inline-block;
-    width: auto;
+    display: table-cell;
+    vertical-align: middle;
 }
 
 .left{
     text-align: left;
-    margin-right: 150px;
+    padding-right: 150px;
 }
 
 .right{
-    text-align: right;
-    display: inline-block;
-    margin-bottom: 20px;
     font-size: 120px;
 }
 
@@ -39,6 +38,8 @@ body{
 .mtitle{
     font-size: 46px;
     font-weight: normal;
+    line-height: 50px;
+    margin: 0;
 }
 
 .desc{

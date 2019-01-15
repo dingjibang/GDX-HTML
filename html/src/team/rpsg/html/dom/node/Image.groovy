@@ -56,12 +56,24 @@ class Image extends HTMLDom {
 
 			def callback = {AsyncLoadImage img ->
 				img.layout()
-
+				
 				if(lh)
-					container.height({_ -> img.imageHeight})
+					container.height(new Value() {
+						float get(Actor context) {
+							img.imageHeight
+						}
+					})
 
 				if(lw)
-					container.width({_ -> img.imageWidth})
+					container.width(new Value() {
+						float get(Actor context) {
+							img.imageWidth
+						}
+					})
+
+				if(lw || lh)
+					img.invalidateHierarchy()
+				
 			}
 
 			def img = new AsyncLoadImage(src, callback, res)
