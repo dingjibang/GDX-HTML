@@ -69,7 +69,7 @@ class TableLayout {
 
 			dom.parse()
 
-			table = new Table()
+			table = new Table().left().top()
 			table.fillParent = true
 
 			dom.debugStrings.add { "table:${Math.random()}" + table.width + ", " + table.height }
@@ -85,7 +85,7 @@ class TableLayout {
 					dom.height != 0 ? dom.height : Math.max(context.height, (context as Table).prefHeight)
 				}
 			})
-			dom.current.addActor(container)
+			dom.addActor(container)
 
 			return dom
 
@@ -149,5 +149,9 @@ class TableLayout {
 //			current.height(Value.prefHeight)
 			current.expandY()
 		}
+	}
+
+	void addQuirks(Dom dom) {
+
 	}
 }

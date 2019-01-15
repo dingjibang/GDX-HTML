@@ -132,12 +132,15 @@ class Dom extends VerticalGroup {
 
 		switch (display.toLowerCase()){
 			case "block":
-				needsRow = true;
+				needsRow = true
 				break
 			case "table":
 			case "table-row":
 			case "table-row-group":
 			case "table-header-group":
+				needsRow = true
+				tableLayout.set(this)
+				break
 			case "table-cell":
 				tableLayout.set(this)
 				break
@@ -273,6 +276,8 @@ class Dom extends VerticalGroup {
 				if(actor)
 					current.addActor(actor)
 
+			} else if(this.tableLayout.isTable || this.tableLayout.isTBody && this.tableLayout.parent.isTable){
+				this.tableLayout.addQuirks(child)
 			} else if(child.needsRow || child.display == "inline-block"){
 				def container = new AutoSizeContainer(child)
 				child.parentContainer = container

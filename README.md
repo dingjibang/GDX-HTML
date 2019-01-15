@@ -86,6 +86,7 @@ Using HTML + CSS + JS to build libGDX UI!
 - :green_heart: **&lt;tr /&gt;** with **display: table-row**
 - :green_heart: **&lt;td /&gt; &lt;th /&gt;** with **display: table-cell**
 - :green_heart: **vertical-align**
+    - ###### :broken_heart: *table* directly contains a *div* is illegal, unless the div is set to display: table-cell, otherwise any display is weird.
     - ###### :broken_heart: For performance, &lt;table&gt; or display: table, is not support margin properties. As an alternative, you can include a container outside of &lt;table&gt; and set padding.
     - ###### :broken_heart: Table is too metaphysical, it is likely to be different from the browser display.
     - ###### :broken_heart: Each cell will be expand() by default, unless you set a size, if you set the width or height but do not show what you want, you can try to set the size (fixed value, or percentage) for each column of the cell. 
