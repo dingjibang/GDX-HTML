@@ -78,14 +78,17 @@ Using HTML + CSS + JS to build libGDX UI!
 - :green_heart: **display: inline**
 - :heart: **display: inline-block**
 - :heart: **display: block**
-	- display block / inline-block uses an ugly implementation, sometimes it may not be the same as what the browser shows.
+	- ###### display block / inline-block uses an ugly implementation, sometimes it may not be the same as what the browser shows.
 - :blue_heart: **display: table**
 
 ## Table layout
-- :blue_heart: **&lt;table /&gt;** with **display: table**
-- :blue_heart: **&lt;tr /&gt;** with **display: table-row**
-- :blue_heart: **&lt;td /&gt; &lt;th /&gt;** with **display: table-cell**
-- :blue_heart: **vertical-align**
+- :green_heart: **&lt;table /&gt;** with **display: table**
+- :green_heart: **&lt;tr /&gt;** with **display: table-row**
+- :green_heart: **&lt;td /&gt; &lt;th /&gt;** with **display: table-cell**
+- :green_heart: **vertical-align**
+    - ###### :broken_heart: For performance, &lt;table&gt; or display: table, is not support margin properties. As an alternative, you can include a container outside of &lt;table&gt; and set padding.
+    - ###### :broken_heart: Table is too metaphysical, it is likely to be different from the browser display.
+    - ###### :broken_heart: Each cell will be expand() by default, unless you set a size, if you set the width or height but do not show what you want, you can try to set the size (fixed value, or percentage) for each column of the cell. 
 
 ## Font
 - :blue_heart: **font-family**

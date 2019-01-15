@@ -74,7 +74,18 @@ class TableLayout {
 
 			dom.debugStrings.add { "table:${Math.random()}" + table.width + ", " + table.height }
 
-			dom.current.addActor(new Container(table).width(dom.width).height(dom.height))
+			def container = new Container(table)
+			container.width(new Value() {
+				float get(Actor context) {
+					dom.width != 0 ? dom.width : Math.max(context.width, (context as Table).prefWidth)
+				}
+			})
+			container.height(new Value() {
+				float get(Actor context) {
+					dom.height != 0 ? dom.height : Math.max(context.height, (context as Table).prefHeight)
+				}
+			})
+			dom.current.addActor(container)
 
 			return dom
 
@@ -86,20 +97,6 @@ class TableLayout {
 			def c = add(dom)
 			dom.debugStrings.add { "cell: pw" + c.getPrefWidth() + ", ph" + c.getPrefHeight() }
 
-//			if(dom.heightValue){
-//				c.height(new Value() {
-//					float get(Actor context) {
-//						return dom.heightValue.get(parent.dom)
-//					}
-//				})
-//			}
-//			if(dom.widthValue){
-//				c.width(new Value() {
-//					float get(Actor context) {
-//						return dom.widthValue.get(parent.dom)
-//					}
-//				})
-//			}
 			return null
 		}
 
@@ -110,28 +107,47 @@ class TableLayout {
 
 	Cell<Dom> add(Dom dom){
 		current = table.add(dom).align(AlignParser.join(dom.textAlign, dom.verticalAlign))
-		current.expand()
 
-		if(dom.widthValue || dom.heightValue){
-			if(dom.widthValue){
-				current.growX()
+		if(dom.widthValue){
+			if(dom.widthValue instanceof Value.Fixed){
 				current.width(new Value() {
 					float get(Actor context) {
-						return dom.widthValue.get(table)
+						Math.max((context as Dom).prefWidth, context.width)
 					}
 				})
 			}
-			if(dom.heightValue) {
-				current.growY()
+
+			if(dom.widthValue instanceof SizeParser.percentInnerValue){
+				def percent = (dom.widthValue as SizeParser.percentInnerValue).percent
+				current.width(new Value() {
+					float get(Actor context) {
+						parent.table.width * percent
+					}
+				})
+			}
+		}else {
+//			current.width(Value.prefWidth)
+			current.expandX()
+		}
+		if(dom.heightValue){
+			if(dom.heightValue instanceof Value.Fixed){
 				current.height(new Value() {
 					float get(Actor context) {
-						return dom.heightValue.get(table)
+						Math.max((context as Dom).prefHeight, context.height)
+					}
+				})
+			}
+			if(dom.heightValue instanceof SizeParser.percentInnerValue){
+				def percent = (dom.heightValue as SizeParser.percentInnerValue).percent
+				current.height(new Value() {
+					float get(Actor context) {
+						parent.table.height * percent
 					}
 				})
 			}
 		}else{
-
+//			current.height(Value.prefHeight)
+			current.expandY()
 		}
-
 	}
 }

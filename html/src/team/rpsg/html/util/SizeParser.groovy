@@ -75,26 +75,32 @@ class SizeParser {
 		return null
 	}
 
-	@CompileStatic
-	static Value percentInnerWidth(float percent){
-		return new Value() {
+	static Value percentInnerWidth(float p){
+		return new percentInnerValue() {
+			float getPercent() {
+				p
+			}
+
 			float get (Actor actor) {
 				if(actor instanceof Dom)
-					return (actor as Dom).innerWidth * percent
+					return (actor as Dom).innerWidth * p
 
-				return (actor as Table).width * percent
+				return (actor as Table).width * p
 			}
 		}
 	}
 
-	@CompileStatic
-	static Value percentInnerHeight(float percent){
-		return new Value() {
+	static Value percentInnerHeight(float p){
+		return new percentInnerValue() {
+			float getPercent() {
+				p
+			}
+
 			float get (Actor actor) {
 				if(actor instanceof Dom)
-					return (actor as Dom).innerHeight * percent
+					return (actor as Dom).innerHeight * p
 
-				return (actor as Table).height * percent
+				return (actor as Table).height * p
 			}
 		}
 	}
@@ -106,5 +112,9 @@ class SizeParser {
 		float get(Actor context) {
 			return 0
 		}
+	}
+
+	abstract static class percentInnerValue extends Value{
+		abstract float getPercent()
 	}
 }

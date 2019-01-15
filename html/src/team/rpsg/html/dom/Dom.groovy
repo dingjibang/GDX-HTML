@@ -164,8 +164,6 @@ class Dom extends VerticalGroup {
 
 		def widthParser = {v -> SizeParser.parse(v, false, SizeParser.&percentInnerWidth)}
 		def defaultWidth = display == "block" ? "100%" : "auto"
-		if(tableLayout.isTD)
-			defaultWidth = "100%"
 		widthValue = style("width", defaultWidth, widthParser, false) as Value
 		if(!widthValue) widthValue = style("max-width", defaultWidth, widthParser, false) as Value
 		if(!widthValue) widthValue = style("min-width", defaultWidth, widthParser, false) as Value
