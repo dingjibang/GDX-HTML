@@ -81,7 +81,7 @@ project(":html") {
 
     dependencies {
         compile "org.mozilla:rhino:1.7.8-SNAPSHOT"
-        compile group: 'net.sourceforge.cssparser', name: 'cssparser', version: '0.9.26'
+	    compile group: 'net.sourceforge.cssparser', name: 'cssparser', version: '0.9.26'
         compile 'org.codehaus.groovy:groovy:2.4.8'
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"

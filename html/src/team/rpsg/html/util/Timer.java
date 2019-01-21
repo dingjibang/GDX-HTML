@@ -1,4 +1,4 @@
-package team.rpsg.htmlTest.util;
+package team.rpsg.html.util;
 
 import com.badlogic.gdx.Gdx;
 
@@ -10,13 +10,13 @@ import java.util.List;
  * LibGDX本身也有个{@link Timer}工具，但是他的实现是靠多线程的，为了避免吃到意外的屎，只好造一个轮子了2333，该轮子不依靠线程，而是在主线程的主循环里工作。
  */
 public class Timer {
-	static List<Task> list = new ArrayList<>();
-	static List<Task> addList = new ArrayList<>();
+    List<Task> list = new ArrayList<>();
+    List<Task> addList = new ArrayList<>();
 
-	public static final int FOREVER = -1;
-	static boolean pause = false;
+    public static final int FOREVER = -1;
+	boolean pause = false;
 	
-	public static Task add(TimeType type, int delay, int repeat, Runnable run) {
+	public Task add(TimeType type, int delay, int repeat, Runnable run) {
 		Task task = new Task();
 		task.run = run;
 		task.time = task.originTime = delay;
@@ -27,11 +27,11 @@ public class Timer {
 		return task;
 	}
 	
-	public static Task add(TimeType type, int delay, Runnable run) {
+	public Task add(TimeType type, int delay, Runnable run) {
 		return add(type, delay, 1, run);
 	}
 	
-	public static void act() {
+	public void act() {
 		float delta = Gdx.graphics.getRawDeltaTime();
 
 		if(!addList.isEmpty()){
@@ -55,19 +55,19 @@ public class Timer {
 		}
 	}
 
-	public static void pause() {
+	public void pause() {
 		pause = true;
 	}
 
-	public static void resume() {
+	public void resume() {
 		pause = false;
 	}
 
-	public static void remove(Task timer) {
+	public void remove(Task timer) {
 		list.remove(timer);
 	}
 
-    public static void then(Runnable o) {
+    public void then(Runnable o) {
 		add(TimeType.frame, 0, o);
     }
 

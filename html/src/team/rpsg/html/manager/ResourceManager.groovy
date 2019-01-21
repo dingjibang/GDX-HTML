@@ -1,6 +1,7 @@
 package team.rpsg.html.manager
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.assets.AssetLoaderParameters
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Pixmap
@@ -76,7 +77,7 @@ class ResourceManager {
 	 */
 	Texture getTexture(String path){
 		assetManager.load(path, Texture.class)
-		while(!assetManager.update())
+		while(!assetManager.update()){}
 		return assetManager.get(path, Texture.class)
 	}
 

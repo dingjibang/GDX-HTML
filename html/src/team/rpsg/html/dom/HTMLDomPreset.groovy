@@ -49,6 +49,7 @@ enum HTMLDomPreset {
 	HR("display: block;margin-top: 0.5em;margin-bottom: 0.5em;margin-left: auto;margin-right: auto;border-style: inset;border-width: 1px;"),
 	HTML("display: block;"),
 	I("font-style: italic;"),
+	IMG("display: inline-block;"),
 	IFRAME("display: block;"),
 	INS("text-decoration: underline;"),
 	KBD("font-family: monospace;"),

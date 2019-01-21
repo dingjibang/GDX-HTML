@@ -13,6 +13,7 @@ import com.steadystate.css.dom.CSSStyleRuleImpl
 import com.steadystate.css.dom.CSSUnknownRuleImpl
 import com.steadystate.css.parser.CSSOMParser
 import com.steadystate.css.parser.SACParserCSS3
+import com.sun.webkit.dom.DocumentImpl
 import groovy.transform.CompileStatic
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -23,6 +24,9 @@ import team.rpsg.html.dom.Root
 import team.rpsg.html.dom.Dom
 import team.rpsg.html.manager.ResourceManager
 import team.rpsg.html.util.PathParser
+import team.rpsg.html.util.Timer
+
+import javax.xml.transform.dom.DOMSource
 
 /**
  * GDX-HTML<br>
@@ -33,6 +37,7 @@ import team.rpsg.html.util.PathParser
 @CompileStatic
 class HTMLStage extends Stage{
 
+	Timer timer
 	Document document
 	Dom rootDom
 	ResourceManager res
@@ -52,10 +57,12 @@ class HTMLStage extends Stage{
 			this.document.baseUri = base.last().attr("href")
 		}
 
+
 		forceBuild()
 	}
 
 	void forceBuild(){
+		timer = new Timer()
 		this.clear()
 		styles.clear()
 
@@ -130,6 +137,7 @@ class HTMLStage extends Stage{
 	}
 
 	void act() {
+		timer.act()
 		res.act()
 		super.act()
 	}

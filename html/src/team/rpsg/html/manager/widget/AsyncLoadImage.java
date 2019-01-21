@@ -22,17 +22,22 @@ public class AsyncLoadImage extends Image {
 	private CustomRunnable<AsyncLoadImage> _onLoaded = null;
 
 	private ResourceManager resourceManager = null;
-	
+
+
 	private AsyncLoadImage() {}
 	
 	public AsyncLoadImage(String texturePath, ResourceManager resourceManager) {
 		this.texturePath = texturePath;
 		this.resourceManager = resourceManager;
+
+        loadTexture();
 	}
 	
 	public AsyncLoadImage(String texturePath, CustomRunnable<AsyncLoadImage> onLoaded, ResourceManager resourceManager) {
 		this(texturePath, resourceManager);
 		this._onLoaded = onLoaded;
+
+        loadTexture();
 	}
 	
 	/**
@@ -54,19 +59,21 @@ public class AsyncLoadImage extends Image {
 	
 	/**当该纹理被调用绘制时，才开始懒加载纹理，否则歇着*/
 	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
-		loadTexture();
+	    super.draw(batch, parentAlpha);
 	}
-	
+
+
 	TextureParameter parameter = new TextureParameter();
 	{
 		/**当纹理加载完成后的回调*/
 		parameter.loadedCallback = (assetManager, fileName, type) -> {
-			setDrawable(new TextureRegionDrawable(new TextureRegion(assetManager.get(fileName, Texture.class))));
 			loaded = true;
-			init();
-			if(_onLoaded != null)
-				_onLoaded.run(AsyncLoadImage.this);
+
+            setDrawable(new TextureRegionDrawable(new TextureRegion(resourceManager.assetManager.get(texturePath, Texture.class))));
+            init();
+
+            if(_onLoaded != null)
+                _onLoaded.run(AsyncLoadImage.this);
 		};
 	}
 	

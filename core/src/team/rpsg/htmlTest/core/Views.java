@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import team.rpsg.gdxQuery.$;
 import script.ui.view.GameView;
+import team.rpsg.html.util.Timer;
 import team.rpsg.htmlTest.ui.view.ParameterizableView;
 import team.rpsg.htmlTest.ui.view.View;
 
@@ -75,9 +76,7 @@ public class Views implements ApplicationListener {
 			insertViews.clear();
 		}
 		
-		//延时运行工具
-		team.rpsg.htmlTest.util.Timer.act();
-		
+
 		//依次遍历view
 		//创建views的快照进行遍历
 		try{

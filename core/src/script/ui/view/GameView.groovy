@@ -1,12 +1,10 @@
 package script.ui.view
 
-import com.badlogic.gdx.Gdx
+
 import com.badlogic.gdx.Input
-import com.badlogic.gdx.utils.Timer
 import groovy.transform.CompileStatic
-import org.jsoup.nodes.Document
 import team.rpsg.html.HTMLStage
-import team.rpsg.html.dom.TableLayout
+import team.rpsg.html.dom.layout.TableLayout
 import team.rpsg.htmlTest.core.Game
 import team.rpsg.htmlTest.ui.view.View
 

@@ -1,39 +1,36 @@
-package team.rpsg.html.dom
+package team.rpsg.html.dom.layout
 
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Cell
 import com.badlogic.gdx.scenes.scene2d.ui.Container
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.Value
-import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.GdxRuntimeException
 import org.jsoup.nodes.Element
-import team.rpsg.html.manager.widget.AutoSizeContainer
+import team.rpsg.html.dom.Dom
 import team.rpsg.html.util.AlignParser
 import team.rpsg.html.util.SizeParser
 
-class TableLayout {
+class TableLayout extends AbstractLayout{
 	static String[] DISPLAY_NAME = ["table", "table-row", "table-cell", "table-row-group", "table-header-group"]
 
 	TableLayout parent
+
 	boolean isTable, isTR, isTD, isTHead, isTBody
 
-	Dom dom
 
 	Table table
 	Cell<Dom> current
 
-
-	TableLayout() {
-
-	}
-
-	void set(Dom dom){
-
+	TableLayout(Dom dom) {
+		super(dom)
 		if(!(dom.node instanceof Element))
 			throw new GdxRuntimeException("must case **DOM ELEMENT** to table.")
+	}
 
-		this.dom = dom
+	void parse(){
+		if(dom.parentDom.layout instanceof TableLayout)
+			parent = dom.parentDom.layout as TableLayout
 
 		def display = dom.display
 
@@ -56,16 +53,13 @@ class TableLayout {
 		}
 	}
 
-	Actor apply() {
+	Actor build() {
 		table = parent?.table
 
 		if(!isTable && table == null)
 			return dom
 
 		if(isTable){
-
-			def stage = dom.stage
-			dom.stage = stage
 
 			dom.parse()
 
@@ -77,12 +71,12 @@ class TableLayout {
 			def container = new Container(table)
 			container.width(new Value() {
 				float get(Actor context) {
-					dom.width != 0 ? dom.width : Math.max(context.width, (context as Table).prefWidth)
+					dom.widthValue != null ? dom.width : Math.max(context.width, (context as Table).prefWidth)
 				}
 			})
 			container.height(new Value() {
 				float get(Actor context) {
-					dom.height != 0 ? dom.height : Math.max(context.height, (context as Table).prefHeight)
+					dom.heightValue != null ? dom.height : Math.max(context.height, (context as Table).prefHeight)
 				}
 			})
 			dom.addActor(container)
@@ -108,7 +102,6 @@ class TableLayout {
 	private void setCellWidth(){
 		current.width(new Value() {
 			float get(Actor context) {
-				println(Math.max((context as Dom).prefWidth, context.width))
 				Math.max((context as Dom).prefWidth, context.width)
 			}
 		})

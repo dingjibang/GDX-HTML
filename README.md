@@ -4,6 +4,8 @@ Using HTML + CSS + JS to build libGDX UI!
 
 用HTML+CSS+JS构建libGDX的UI!
 
+#### [点我查看中文说明](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/README_CN.md)
+
 ![Image](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/readme/show2.png)
 ![Image](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/readme/show1.png)
 
@@ -59,6 +61,7 @@ Using HTML + CSS + JS to build libGDX UI!
 ## Image / Texture
 - :green_heart: **&lt;img src="..." /&gt;**
 - :green_heart: **-gdx-image-scaling**
+    - ###### Image is loaded asynchronously by default, which does not block the rendering of html, but when the Image is loaded, it will be re-layout, which will make the whole interface flash and affect performance. If your image is not very large, ***set &lt;img async="false" src="..." /&gt;*** and then becomes synchronous load. You can also preset a fixed width and height for the Image.
 	- ###### To set the scaling of &lt;img /&gt;, you can use this css property, value is enum name of com.badlogic.gdx.utils.Scaling, like "fit" or "none".
 
 ## Rich background
@@ -89,7 +92,8 @@ Using HTML + CSS + JS to build libGDX UI!
     - ###### :broken_heart: *Table* directly contains a *Div* is illegal, unless the div is set to display: table-cell, otherwise any display is weird.
     - ###### :broken_heart: For performance, &lt;table&gt; or display: table, is not support margin or padding properties. As an alternative, you can include a container outside of &lt;table&gt; and set padding.
     - ###### :broken_heart: Table is too metaphysical, it is likely to be different from the browser display.
-    - ###### :broken_heart: Each cell will be expand() by default, unless you set a size, if you set the width or height but do not show what you want, you can try to set the size (fixed value, or percentage) for each column of the cell. 
+    - ###### :broken_heart: TBody, THead and TR are fake and will not be read by the rendering engine(Just used to call row()), so don't think of it here. 
+    - ###### Each cell will be expand() by default, unless you set a size, if you set the width or height but do not show what you want, you can try to set the size (fixed value, or percentage) for each column of the cell.
 
 ## Font
 - :blue_heart: **font-family**

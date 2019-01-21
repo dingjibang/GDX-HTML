@@ -73,5 +73,5 @@ public class Image extends com.badlogic.gdx.scenes.scene2d.ui.Image{
 		setTouchable(null);
 		return this;
 	}
-	
+
 }
