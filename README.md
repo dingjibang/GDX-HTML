@@ -4,7 +4,7 @@ Using HTML + CSS + JS to build libGDX UI!
 
 用HTML+CSS+JS构建libGDX的UI!
 
-#### [点我查看中文说明](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/README_CN.md)
+#### [点我查看中文说明](https://github.com/dingjibang/GDX-HTML/blob/master/README_CN.md)
 
 ![Image](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/readme/show2.png)
 ![Image](https://raw.githubusercontent.com/dingjibang/GDX-HTML/master/readme/show1.png)
